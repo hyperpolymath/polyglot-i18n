@@ -2,10 +2,7 @@
 # polyglot-i18n .gitattributes
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# Language priority: ReScript > Rust (WASM) > Scheme (Guix) > Nickel > Just
-# Legacy JavaScript is transitional and excluded from language statistics
-#
-# Container tooling: nerdctl (not Docker)
+# Git attributes for consistent line endings, diffs, and language statistics
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Default behavior
@@ -13,125 +10,63 @@
 * text=auto eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# PRIMARY LANGUAGES (counted in stats)
+# Source code
 # ─────────────────────────────────────────────────────────────────────────────────
+*.js         text eol=lf linguist-language=JavaScript
+*.mjs        text eol=lf linguist-language=JavaScript
+*.cjs        text eol=lf linguist-language=JavaScript
+*.ts         text eol=lf linguist-language=TypeScript
+*.tsx        text eol=lf linguist-language=TypeScript
+*.jsx        text eol=lf linguist-language=JavaScript
 
-# ReScript - Primary implementation language
+# ReScript
 *.res        text eol=lf linguist-language=ReScript
 *.resi       text eol=lf linguist-language=ReScript
 
-# Rust - WASM acceleration layer
+# Rust
 *.rs         text eol=lf linguist-language=Rust
 Cargo.toml   text eol=lf linguist-language=TOML
 Cargo.lock   text eol=lf linguist-generated
 
-# Scheme - Guix packaging (primary package manager)
-*.scm        text eol=lf linguist-language=Scheme
-
-# Nickel - Type-safe configuration
+# ─────────────────────────────────────────────────────────────────────────────────
+# Configuration
+# ─────────────────────────────────────────────────────────────────────────────────
+*.json       text eol=lf linguist-language=JSON
+*.yaml       text eol=lf linguist-language=YAML
+*.yml        text eol=lf linguist-language=YAML
+*.toml       text eol=lf linguist-language=TOML
 *.ncl        text eol=lf linguist-language=Nickel
 
-# Nix - Fallback packaging
+# Nix/Guix
 *.nix        text eol=lf linguist-language=Nix
+*.scm        text eol=lf linguist-language=Scheme
 flake.lock   text eol=lf linguist-generated
 
-# Just - Task runner
-justfile     text eol=lf linguist-language=Just
-
-# TypeScript - Deno module types only
-deno/**/*.ts text eol=lf linguist-language=TypeScript
-
 # ─────────────────────────────────────────────────────────────────────────────────
-# LEGACY JAVASCRIPT (excluded from stats - transitional)
-# ─────────────────────────────────────────────────────────────────────────────────
-# These files are being migrated to ReScript and are marked as vendored
-# to reflect the project's target architecture, not its current state
-
-# Core legacy (to be replaced by ReScript)
-i18n.js              text eol=lf linguist-vendored
-index.js             text eol=lf linguist-vendored
-
-# Tests (to be migrated to ReScript/Deno test)
-test/**/*.js         text eol=lf linguist-vendored
-
-# Examples (to be migrated)
-examples/**/*.js     text eol=lf linguist-vendored
-
-# Adapters (to be migrated to ReScript)
-adapters/**/*.js     text eol=lf linguist-vendored
-
-# Automation/observability (to be migrated)
-automation/**/*.js   text eol=lf linguist-vendored
-observability/**/*.js text eol=lf linguist-vendored
-audit/**/*.js        text eol=lf linguist-vendored
-
-# Benchmarks (to be migrated)
-benchmarks/**/*.js   text eol=lf linguist-vendored
-
-# Tools (to be migrated to ReScript CLI)
-tools/**/*.js        text eol=lf linguist-vendored
-
-# Config files (not code)
-.eslintrc.js         text eol=lf linguist-vendored
-*.config.js          text eol=lf linguist-vendored
-*.config.mjs         text eol=lf linguist-vendored
-
-# Generated JS from ReScript (when we have it)
-lib/**/*.js          text eol=lf linguist-generated
-lib/**/*.mjs         text eol=lf linguist-generated
-src/**/*.bs.js       text eol=lf linguist-generated
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Configuration files
-# ─────────────────────────────────────────────────────────────────────────────────
-*.json       text eol=lf
-*.yaml       text eol=lf
-*.yml        text eol=lf
-*.toml       text eol=lf
-deno.json    text eol=lf
-deno.jsonc   text eol=lf
-import_map.json text eol=lf
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Documentation (excluded from language stats)
+# Documentation
 # ─────────────────────────────────────────────────────────────────────────────────
 *.md         text eol=lf linguist-documentation
 *.adoc       text eol=lf linguist-documentation
-*.txt        text eol=lf linguist-documentation
-LICENSE      text eol=lf linguist-documentation
-CLAUDE.md    text eol=lf linguist-documentation
+*.txt        text eol=lf
+LICENSE      text eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Shell scripts
+# Shell & Scripts
 # ─────────────────────────────────────────────────────────────────────────────────
 *.sh         text eol=lf
 *.bash       text eol=lf
 *.zsh        text eol=lf
 *.fish       text eol=lf
+justfile     text eol=lf
 Makefile     text eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Container - nerdctl/Containerfile (NOT Docker)
+# Container & CI
 # ─────────────────────────────────────────────────────────────────────────────────
-# We use Containerfile (OCI standard) not Dockerfile
-# apko.yaml for declarative Chainguard Wolfi builds
-Containerfile           text eol=lf linguist-language=Dockerfile linguist-detectable
-container/Containerfile text eol=lf linguist-language=Dockerfile linguist-detectable
-*.containerfile         text eol=lf linguist-language=Dockerfile
-
-# Suppress Docker naming in favor of OCI/nerdctl terminology
-Dockerfile              text eol=lf linguist-vendored linguist-detectable=false
-*.dockerfile            text eol=lf linguist-vendored linguist-detectable=false
-
-# apko declarative builds
-apko.yaml               text eol=lf
-container/apko.yaml     text eol=lf
-
-# Compose (nerdctl-compose)
-*-compose.yaml          text eol=lf
-*-compose.yml           text eol=lf
-compose.yaml            text eol=lf
-compose.yml             text eol=lf
+Containerfile    text eol=lf
+Dockerfile       text eol=lf
+*.dockerfile     text eol=lf
+.dockerignore    text eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Binary files
@@ -149,19 +84,23 @@ compose.yml             text eol=lf
 *.gz         binary
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Lock files (generated, don't diff, don't count)
+# Lock files (generated, don't diff)
 # ─────────────────────────────────────────────────────────────────────────────────
 package-lock.json    text eol=lf linguist-generated -diff
 pnpm-lock.yaml       text eol=lf linguist-generated -diff
 yarn.lock            text eol=lf linguist-generated -diff
-deno.lock            text eol=lf linguist-generated -diff
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Vendored (exclude from stats)
+# ─────────────────────────────────────────────────────────────────────────────────
+examples/**/*.js     linguist-vendored=false
+test/**/*.js         linguist-vendored=false
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Merge strategies
 # ─────────────────────────────────────────────────────────────────────────────────
 package-lock.json    merge=ours
 pnpm-lock.yaml       merge=ours
-deno.lock            merge=ours
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Export ignore (not included in archives)
@@ -175,4 +114,5 @@ deno.lock            merge=ours
 .prettierrc          export-ignore
 .nvmrc               export-ignore
 test/                export-ignore
+examples/            export-ignore
 benchmarks/          export-ignore

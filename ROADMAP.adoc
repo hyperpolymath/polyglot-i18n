@@ -1,4 +1,4 @@
-= polyglot-i18n: Architectural Transformation Roadmap
+= i18n-node-enhanced: Architectural Transformation Roadmap
 :toc: macro
 :toc-title: Table of Contents
 :toclevels: 4
@@ -8,593 +8,669 @@
 :experimental:
 
 [.lead]
-A comprehensive roadmap for transforming polyglot-i18n from a Node.js/npm library into a ReScript-first, WASM-accelerated, Deno-primary internationalization platform.
-
-[NOTE]
-====
-*Current Status:* The legacy JavaScript codebase is marked as transitional in `.gitattributes`. Language statistics reflect our target architecture (ReScript, Rust, Scheme), not the current transitional state.
-====
+A comprehensive roadmap for transforming i18n-node-enhanced into a polyglot, Guix-first, security-hardened internationalization platform.
 
 toc::[]
 
 == Executive Summary
 
-polyglot-i18n is a fork of https://github.com/mashpie/i18n-node[i18n-node] by Marcus Spiegel, reimagined as a modern polyglot platform:
+This roadmap outlines the strategic transformation of i18n-node-enhanced from a Node.js-centric library into a modern, polyglot internationalization platform featuring:
 
-* **ReScript-first architecture** - minimal JavaScript surface, maximum type safety
-* **WebAssembly performance core** - Rust-powered hot paths
-* **Deno runtime primary** - npm as legacy compatibility layer only
-* **Guix channels primary** - reproducible builds, Nix fallback
-* **Chainguard Wolfi containers** - supply-chain security
-* **Nickel configuration** - type-safe, programmable configs
-* **Comprehensive CLI** - exhaustive option permutations with man pages
+* **ReScript-first architecture** with minimal JavaScript surface
+* **WebAssembly performance core** for compute-intensive operations
+* **Deno runtime primary** with npm compatibility layer
+* **Guix channels primary** with Nix flake fallback
+* **Chainguard Wolfi containers** for supply-chain security
+* **Nickel configuration** for type-safe, programmable configs
+* **Comprehensive CLI** with exhaustive option permutations
 
-== Phase 0: Current State & Immediate Actions
+== Phase 1: Foundation (Weeks 1-2)
 
-=== 0.1 Project Status
+=== 1.1 Guix Channel Infrastructure
 
-[cols="1,2,1"]
-|===
-|Component |Status |Action
-
-|Core Implementation
-|`i18n.js` - Legacy JavaScript (~1200 lines)
-|Migrate to ReScript
-
-|Package Manager
-|npm/package.json still primary
-|Transition to Deno
-
-|Type Definitions
-|`index.d.ts` - TypeScript
-|Replace with ReScript types
-
-|Tests
-|Mocha/Should.js (~6000 lines JS)
-|Migrate to Deno.test
-
-|Examples
-|Express/Node.js focused
-|Add Deno examples
-
-|Runtime
-|Node.js only
-|Deno primary, Node compat
-|===
-
-=== 0.2 Immediate Migration Steps
-
-.Step 1: Create Deno Entry Point
-[source,typescript]
+[source,scheme]
 ----
-// deno/mod.ts - Deno-native entry point
-export { I18n, type I18nConfig } from "./core.ts"
-export { translate, __, __n, __mf } from "./translate.ts"
-export { plural } from "./plural.ts"
-----
-
-.Step 2: Port Core to TypeScript/Deno (Intermediate)
-[source]
-----
-deno/
-├── mod.ts              # Main exports
-├── core.ts             # I18n class (port from i18n.js)
-├── translate.ts        # Translation functions
-├── plural.ts           # Plural rules (CLDR)
-├── messageformat.ts    # ICU MessageFormat
-├── locale.ts           # Locale detection/management
-├── catalog.ts          # Translation catalog I/O
-├── deps.ts             # External dependencies
-└── types.ts            # Type definitions
-----
-
-.Step 3: Establish ReScript Core
-[source]
-----
-src/
-├── I18n.res            # Main module
-├── I18n.resi           # Interface
-├── Locale.res          # Locale types
-├── Catalog.res         # Translation catalog
-├── Plural.res          # CLDR plural rules
-├── MessageFormat.res   # ICU formatting
-└── Interop.res         # JS/Deno FFI
-----
-
-=== 0.3 Dependency Transition
-
-[cols="1,2,2"]
-|===
-|npm Dependency |Deno Equivalent |Migration Path
-
-|`@messageformat/core`
-|`npm:@messageformat/core` or Rust WASM
-|npm specifier initially, WASM later
-
-|`make-plural`
-|`npm:make-plural` or Rust WASM
-|npm specifier initially, WASM later
-
-|`mustache`
-|Deno-native implementation
-|Port or find Deno module
-
-|`fast-printf`
-|`@std/fmt` or custom
-|Use Deno std library
-
-|`debug`
-|`@std/log`
-|Use Deno std library
-
-|`math-interval-parser`
-|Rust WASM
-|Implement in WASM core
-|===
-
-== Phase 1: Deno-First Runtime
-
-=== 1.1 Deno Module Structure
-
-.deno.json Configuration
-[source,json]
-----
-{
-  "name": "@polyglot/i18n",
-  "version": "0.16.0",
-  "exports": {
-    ".": "./deno/mod.ts",
-    "./core": "./deno/core.ts",
-    "./plural": "./deno/plural.ts"
-  },
-  "tasks": {
-    "test": "deno test --allow-read",
-    "bench": "deno bench",
-    "compile": "deno compile --output=polyglot-i18n deno/cli.ts"
-  }
-}
+;; Primary package management via Guix channels
+;; Ensures reproducibility and supply-chain integrity
 ----
 
 .Deliverables
-* [x] `deno.json` - Deno configuration
-* [ ] `deno/mod.ts` - Main entry point
-* [ ] `deno/core.ts` - Core I18n class
-* [ ] `deno/translate.ts` - Translation functions
-* [ ] `deno/plural.ts` - Plural rule engine
-* [ ] `deno/messageformat.ts` - MessageFormat parser
-* [ ] `deno/catalog.ts` - File I/O for catalogs
-* [ ] `deno/middleware.ts` - Framework middleware (Oak, Hono)
+* [ ] `guix.scm` - Package definition
+* [ ] `channels.scm` - Channel configuration
+* [ ] `.guix-channel` - Channel metadata
+* [ ] `manifest.scm` - Development manifest
+* [ ] Integration with Guix System services
 
-=== 1.2 Node.js Compatibility Layer
+.Architecture Decision Records
+[cols="1,3"]
+|===
+|ADR-001 |Guix channels as primary package source
+|ADR-002 |Nix flakes as fallback mechanism
+|ADR-003 |Content-addressed storage strategy
+|===
 
-.npm Compatibility (Legacy Support)
-[source,typescript]
+=== 1.2 Nix Fallback Layer
+
+[source,nix]
 ----
-// For npm users migrating gradually
-import { I18n } from "npm:polyglot-i18n"
-
-// Or via package.json (Deno reads this)
 {
-  "imports": {
-    "polyglot-i18n": "npm:polyglot-i18n@^0.16.0"
-  }
+  inputs = {
+    guix-compat.url = "github:nix-community/guix-nixpkgs";
+    # Fallback when Guix unavailable
+  };
 }
 ----
 
-.Deliverables
-* [ ] Maintain `package.json` for npm compatibility
-* [ ] Add `"type": "module"` for ESM
-* [ ] Export from both `index.js` and Deno
-* [ ] Conditional exports for Node/Deno
+.Integration Points
+* Flake outputs compatible with Guix packages
+* Shared derivation specifications
+* Cross-platform development shells
 
-== Phase 2: ReScript Core Implementation
+=== 1.3 Chainguard Wolfi Container
 
-=== 2.1 ReScript Project Structure
+.Security Properties
+* Minimal attack surface (wolfi-base)
+* SBOM generation
+* Signature verification
+* Distroless final stage
 
-.rescript.json Configuration
-[source,json]
+[source,dockerfile]
 ----
-{
-  "name": "polyglot-i18n",
-  "sources": [
-    { "dir": "src", "subdirs": true }
-  ],
-  "package-specs": [{
-    "module": "es6",
-    "in-source": false
-  }],
-  "suffix": ".bs.mjs",
-  "warnings": { "error": "+101" },
-  "bs-dependencies": [],
-  "gentypeconfig": {
-    "language": "typescript",
-    "shims": {},
-    "module": "es6",
-    "debug": { "all": false }
-  }
+FROM cgr.dev/chainguard/wolfi-base:latest AS builder
+# Build stage with full toolchain
+
+FROM cgr.dev/chainguard/static:latest AS runtime
+# Minimal runtime with only binary
+----
+
+== Phase 2: Language Transformation (Weeks 3-6)
+
+=== 2.1 ReScript Core Implementation
+
+.Migration Strategy
+[plantuml, rescript-migration, svg]
+....
+@startuml
+package "Current State" {
+  [i18n.js] as js
+  [bindings/rescript/I18n.res] as res_bind
 }
-----
 
-.ReScript Module Hierarchy
+package "Target State" {
+  [src/core/I18n.res] as core
+  [src/runtime/Platform.res] as platform
+  [src/wasm/Bridge.res] as wasm_bridge
+  [generated/i18n.js] as gen_js
+}
+
+js --> core : migrate
+res_bind --> core : absorb
+core --> gen_js : compile
+core --> wasm_bridge : FFI
+@enduml
+....
+
+.ReScript Module Structure
 [source]
 ----
 src/
 ├── core/
 │   ├── I18n.res              # Main API
-│   ├── I18n.resi             # Public interface
-│   ├── Locale.res            # Locale type and operations
+│   ├── Locale.res            # Locale management
 │   ├── Catalog.res           # Translation catalog
-│   ├── Translation.res       # Translation logic
-│   └── Config.res            # Configuration types
-├── plural/
 │   ├── Plural.res            # CLDR plural rules
-│   ├── PluralRules.res       # Rule definitions
-│   └── PluralCategory.res    # Category types
-├── format/
 │   ├── MessageFormat.res     # ICU MessageFormat
-│   ├── Interpolation.res     # Variable interpolation
-│   ├── Mustache.res          # Mustache templating
-│   └── Printf.res            # sprintf formatting
+│   └── Interpolation.res     # String interpolation
 ├── runtime/
 │   ├── Platform.res          # Runtime detection
 │   ├── FileSystem.res        # File I/O abstraction
-│   └── Cache.res             # Translation cache
-└── bindings/
-    ├── Deno.res              # Deno FFI
-    ├── Node.res              # Node.js FFI
-    └── Wasm.res              # WASM FFI
+│   ├── Cache.res             # Caching layer
+│   └── Watcher.res           # File watching
+├── wasm/
+│   ├── Bridge.res            # WASM FFI bindings
+│   ├── PluralEngine.res      # WASM plural calc
+│   └── HashTable.res         # WASM hash lookup
+├── adapters/
+│   ├── Express.res
+│   ├── Deno.res
+│   ├── Bun.res
+│   └── Cloudflare.res
+└── cli/
+    ├── Main.res
+    ├── Commands.res
+    └── Options.res
 ----
 
-=== 2.2 Migration Strategy
+=== 2.2 WebAssembly Performance Core
 
-.Incremental Migration Path
-[plantuml, migration-path, svg]
-....
-@startuml
-state "Legacy JS" as js {
-  [i18n.js]
-}
-
-state "Deno TS" as ts {
-  [deno/mod.ts]
-  [deno/core.ts]
-}
-
-state "ReScript" as res {
-  [src/I18n.res]
-  [src/Plural.res]
-}
-
-state "Generated" as gen {
-  [lib/I18n.bs.mjs]
-}
-
-js --> ts : Port core logic
-ts --> res : Migrate module by module
-res --> gen : Compile ReScript
-gen --> ts : Import generated code
-@enduml
-....
-
-.Priority Order for Migration
-1. `Locale.res` - Pure data types, easy start
-2. `Plural.res` - Self-contained CLDR logic
-3. `Config.res` - Configuration types
-4. `Interpolation.res` - String processing
-5. `MessageFormat.res` - ICU parsing
-6. `Catalog.res` - File I/O
-7. `I18n.res` - Main API (last, depends on all)
-
-== Phase 3: WASM Performance Core
-
-=== 3.1 Rust WASM Modules
-
-.Crate Structure
-[source]
-----
-wasm/
-├── Cargo.toml
-├── src/
-│   ├── lib.rs              # Main entry
-│   ├── plural.rs           # CLDR plural engine
-│   ├── interpolate.rs      # Fast string interpolation
-│   ├── hash.rs             # Translation key lookup
-│   └── messageformat.rs    # ICU parser
-└── pkg/                    # wasm-pack output
-    ├── polyglot_i18n.js
-    ├── polyglot_i18n_bg.wasm
-    └── polyglot_i18n.d.ts
-----
-
-.Performance Targets
+.WASM Module Strategy
 [cols="1,2,1"]
 |===
-|Module |Purpose |Expected Speedup
+|Module |Purpose |Performance Gain
 
-|`plural.wasm`
+|`plural-engine.wasm`
 |CLDR plural rule evaluation
-|~10x over JS
+|~10x faster than JS
 
-|`hash.wasm`
-|Translation key lookup (large catalogs)
-|~5x over JS Map
+|`hash-lookup.wasm`
+|Translation key lookup
+|~5x faster for large catalogs
 
 |`interpolate.wasm`
-|Template variable substitution
-|~3x over JS regex
+|String interpolation
+|~3x faster with many variables
+
+|`validate.wasm`
+|ICU syntax validation
+|Eliminates parsing overhead
 |===
 
-=== 3.2 WASM Integration
-
-.Loading Strategy
-[source,typescript]
+.Rust WASM Implementation
+[source,rust]
 ----
-// deno/wasm.ts - WASM loader
-const wasmModule = await WebAssembly.instantiateStreaming(
-  fetch(new URL("./pkg/polyglot_i18n_bg.wasm", import.meta.url))
-)
-
-export const evaluatePlural = wasmModule.exports.evaluate_plural
-export const interpolate = wasmModule.exports.interpolate
-----
-
-== Phase 4: Guix-First Packaging
-
-=== 4.1 Guix Package Definition
-
-.guix.scm Deliverables
-* [x] `guix.scm` - Package definitions
-* [x] `channels.scm` - Channel configuration
-* [x] `.guix-channel` - Channel metadata
-* [x] `manifest.scm` - Development manifest
-
-.Guix Packages
-[source,scheme]
-----
-;; Available packages:
-;; - polyglot-i18n          (main library)
-;; - polyglot-i18n-cli      (command-line tool)
-;; - polyglot-i18n-wasm     (WASM modules)
-;; - polyglot-i18n-dev      (development environment)
-----
-
-=== 4.2 Nix Fallback
-
-.flake.nix Integration
-[source,nix]
-----
-{
-  inputs.guix-compat.url = "github:nix-community/guix-nixpkgs";
-
-  outputs = { self, nixpkgs, guix-compat }: {
-    packages.default = /* Nix package mirroring Guix */;
-    devShells.default = /* Dev shell with Guix tooling */;
-  };
+#[wasm_bindgen]
+pub fn evaluate_plural(n: f64, locale: &str) -> PluralCategory {
+    // High-performance CLDR plural evaluation
 }
 ----
 
-== Phase 5: Container Infrastructure
+=== 2.3 Deno Primary Runtime
 
-=== 5.1 Chainguard Wolfi Builds
-
-.Container Variants
-[cols="1,2,1"]
-|===
-|Variant |Base |Size Target
-
-|`polyglot-i18n:runtime`
-|`cgr.dev/chainguard/node:latest`
-|< 50MB
-
-|`polyglot-i18n:deno`
-|`cgr.dev/chainguard/wolfi-base`
-|< 100MB
-
-|`polyglot-i18n:cli`
-|`cgr.dev/chainguard/static:latest`
-|< 20MB
-
-|`polyglot-i18n:dev`
-|`cgr.dev/chainguard/wolfi-base`
-|< 500MB
-|===
-
-=== 5.2 apko Declarative Builds
-
-.container/apko.yaml
-[source,yaml]
+.Deno Module Architecture
+[source,typescript]
 ----
-contents:
-  repositories:
-    - https://packages.wolfi.dev/os
-  packages:
-    - wolfi-base
-    - nodejs-20
-    - deno
-
-accounts:
-  groups:
-    - groupname: i18n
-      gid: 65532
-  users:
-    - username: i18n
-      uid: 65532
-      gid: 65532
-
-entrypoint:
-  command: /usr/bin/polyglot-i18n
+// deno.json - Import map configuration
+{
+  "imports": {
+    "i18n/": "./src/",
+    "i18n/wasm": "./wasm/pkg/",
+    "std/": "https://deno.land/std@0.224.0/"
+  }
+}
 ----
 
-== Phase 6: CLI & Configuration
+.npm Compatibility
+* `npm:` specifiers for legacy dependencies
+* Shim layer for Node.js-specific APIs
+* Gradual migration path for existing users
 
-=== 6.1 Nickel Configuration
+== Phase 3: Configuration & CLI (Weeks 7-10)
 
-.config/i18n.ncl Deliverables
-* [x] `i18n.ncl` - Type-safe config schema
-* [x] Environment presets (dev, prod, staging, test)
-* [x] Framework presets (Express, NestJS, Deno)
-* [ ] Config validation CLI integration
+=== 3.1 Nickel Configuration System
 
-=== 6.2 Comprehensive CLI
+.Nickel Schema
+[source,nickel]
+----
+# i18n.ncl - Type-safe configuration
+let I18nConfig = {
+  locales : Array String,
+  defaultLocale : String,
+  fallbacks : { _ : String },
+
+  # Advanced configuration
+  catalog : {
+    directory : String,
+    extension : String,
+    parser : [| 'json, 'yaml, 'toml |],
+    autoReload : Bool,
+    syncFiles : Bool,
+  },
+
+  # Runtime options
+  runtime : {
+    wasm : Bool,
+    cache : {
+      enabled : Bool,
+      maxSize : Number,
+      ttl : Number,
+    },
+  },
+
+  # Validation
+  validation : {
+    strict : Bool,
+    allowMissingKeys : Bool,
+    reportLevel : [| 'error, 'warn, 'info |],
+  },
+} in
+
+# Combinatorial option generation
+let combinations = fun config =>
+  config
+  |> std.record.map (fun k v =>
+    if std.is_record v then
+      combinations v
+    else
+      v
+  )
+in
+
+{
+  Config = I18nConfig,
+  validate = fun c => c & I18nConfig,
+  combinations = combinations,
+}
+----
+
+.Configuration Merging
+[source,nickel]
+----
+# Layered configuration with validation
+let base = import "i18n-base.ncl" in
+let env = import "i18n-${std.env.ENV}.ncl" in
+let local = import "i18n-local.ncl" in
+
+base & env & local
+----
+
+=== 3.2 Comprehensive CLI
 
 .Command Structure
 [source]
 ----
-polyglot-i18n <command> [options]
+i18n <command> [subcommand] [options]
 
 Commands:
-  init          Initialize configuration
-  translate     Translate strings/files
-  validate      Validate locale files
-  sync          Synchronize translations
-  extract       Extract translatable strings
-  compile       Compile to optimized format
-  serve         Start translation server
-  migrate       Migrate between formats
-  benchmark     Run performance benchmarks
-  config        Manage configuration
-  doctor        Diagnose issues
+  init        Initialize i18n configuration
+  translate   Translate text or files
+  validate    Validate locale files
+  sync        Synchronize translations
+  extract     Extract translatable strings
+  compile     Compile translation catalogs
+  serve       Start translation server
+  migrate     Migrate between formats
+  benchmark   Run performance benchmarks
+  config      Manage configuration
+  doctor      Diagnose issues
 ----
 
-.Man Pages
+.Option Permutations
+[cols="1,1,3"]
+|===
+|Category |Options |Combinations
+
+|Output
+|`--format`, `--output`, `--quiet`, `--verbose`, `--color`
+|json, yaml, table, csv, md × stdout, file × 3 verbosity levels × color modes = 90+
+
+|Locale
+|`--locale`, `--fallback`, `--all`, `--default`
+|Per-locale × fallback chains × batch modes = 500+
+
+|Processing
+|`--parallel`, `--workers`, `--batch`, `--incremental`
+|Parallelism levels × worker counts × batch sizes = 100+
+
+|Validation
+|`--strict`, `--lenient`, `--ignore`, `--only`
+|Validation modes × rule combinations = 200+
+|===
+
+.Man Page Structure
 [source]
 ----
 man/
 ├── man1/
-│   ├── polyglot-i18n.1
-│   ├── polyglot-i18n-init.1
-│   ├── polyglot-i18n-translate.1
-│   └── ...
+│   ├── i18n.1           # Main command
+│   ├── i18n-init.1      # Initialization
+│   ├── i18n-translate.1 # Translation
+│   ├── i18n-validate.1  # Validation
+│   ├── i18n-sync.1      # Synchronization
+│   ├── i18n-extract.1   # Extraction
+│   ├── i18n-compile.1   # Compilation
+│   ├── i18n-serve.1     # Server mode
+│   ├── i18n-migrate.1   # Migration
+│   ├── i18n-benchmark.1 # Benchmarking
+│   ├── i18n-config.1    # Configuration
+│   └── i18n-doctor.1    # Diagnostics
 ├── man5/
-│   └── polyglot-i18n.ncl.5
+│   ├── i18n.ncl.5       # Nickel config format
+│   ├── i18n.json.5      # JSON catalog format
+│   └── i18n.yaml.5      # YAML catalog format
 └── man7/
-    ├── polyglot-i18n-tutorial.7
-    └── polyglot-i18n-plural.7
+    ├── i18n-tutorial.7  # Getting started
+    ├── i18n-icu.7       # ICU MessageFormat guide
+    └── i18n-plural.7    # Plural rules guide
 ----
 
-== Phase 7: Testing & Quality
+== Phase 4: Testing & Quality (Weeks 11-14)
 
-=== 7.1 Test Migration
+=== 4.1 Testing Framework Maximization
 
-.From Mocha to Deno.test
-[cols="1,2"]
+.Test Matrix
+[cols="1,2,2"]
 |===
-|Current |Target
+|Layer |Framework |Coverage Target
 
-|`test/*.test.js` (Mocha)
-|`deno/**/*_test.ts` (Deno.test)
+|Unit (ReScript)
+|`rescript-test` + custom assertions
+|100% line coverage
 
-|`nyc` coverage
-|`deno coverage`
+|Unit (WASM)
+|`wasm-bindgen-test` + proptest
+|100% function coverage
 
-|`should.js` assertions
-|`@std/assert`
+|Integration
+|Deno.test + Oak testing
+|All API endpoints
+
+|E2E
+|Playwright + custom CLI harness
+|All user workflows
+
+|Performance
+|Criterion.rs + Deno.bench
+|All hot paths
+
+|Fuzz
+|cargo-fuzz + afl.rs
+|Parser, interpolation
+
+|Property
+|fast-check (ReScript)
+|All pure functions
+
+|Mutation
+|Stryker
+|>90% mutation score
+
+|Contract
+|Pact
+|All external APIs
 |===
 
-.Test Commands
+.Test Organization
 [source]
 ----
-# Deno testing (primary)
-deno task test
-deno task test:coverage
-
-# Legacy npm testing (transitional)
-deno task legacy:test
+tests/
+├── unit/
+│   ├── rescript/          # ReScript unit tests
+│   ├── wasm/              # WASM unit tests
+│   └── fixtures/          # Shared test fixtures
+├── integration/
+│   ├── deno/              # Deno integration
+│   ├── node/              # Node.js compatibility
+│   └── bun/               # Bun runtime
+├── e2e/
+│   ├── cli/               # CLI end-to-end
+│   ├── api/               # API end-to-end
+│   └── scenarios/         # User scenarios
+├── performance/
+│   ├── benchmarks/        # Criterion benchmarks
+│   ├── regression/        # Performance regression
+│   └── profiles/          # Profiling data
+├── fuzz/
+│   ├── corpus/            # Fuzz corpus
+│   └── targets/           # Fuzz targets
+├── property/
+│   ├── generators/        # Property generators
+│   └── properties/        # Property tests
+└── contract/
+    ├── pacts/             # Contract definitions
+    └── providers/         # Provider verification
 ----
 
-=== 7.2 Performance Benchmarks
+=== 4.2 Security Hardening
 
-.Benchmark Suite
+.Security Measures
+[cols="1,2,1"]
+|===
+|Measure |Implementation |Verification
+
+|Supply Chain
+|Guix reproducible builds, SLSA Level 3
+|cosign, in-toto
+
+|Memory Safety
+|Rust WASM core, ReScript type safety
+|MIRI, ASan
+
+|Input Validation
+|Strict parsing, size limits
+|Fuzz testing
+
+|Path Traversal
+|Canonical path resolution
+|Security test suite
+
+|Prototype Pollution
+|Object.create(null), frozen objects
+|Static analysis
+
+|Timing Attacks
+|Constant-time comparison
+|Timing analysis
+
+|Dependency Audit
+|Dependabot, Snyk, OSV
+|CI pipeline
+|===
+
+== Phase 5: CI/CD & Infrastructure (Weeks 15-18)
+
+=== 5.1 CI/CD Pipeline
+
+.Pipeline Architecture
+[plantuml, cicd-pipeline, svg]
+....
+@startuml
+|Build|
+start
+:Checkout;
+:Guix Environment;
+:ReScript Compile;
+:WASM Build;
+:Bundle;
+
+|Test|
+:Unit Tests;
+fork
+  :ReScript Tests;
+fork again
+  :WASM Tests;
+fork again
+  :Deno Tests;
+end fork
+:Integration Tests;
+:E2E Tests;
+:Security Scan;
+
+|Release|
+:Version Bump;
+:Changelog Generate;
+:Package Build;
+fork
+  :npm Publish;
+fork again
+  :Deno.land Publish;
+fork again
+  :Guix Channel Update;
+fork again
+  :Container Push;
+end fork
+:GitHub Release;
+stop
+@enduml
+....
+
+.Workflow Files
+[source]
+----
+.github/workflows/
+├── ci.yml              # Main CI pipeline
+├── release.yml         # Release automation
+├── security.yml        # Security scanning
+├── benchmarks.yml      # Performance tracking
+├── docs.yml            # Documentation build
+├── container.yml       # Container builds
+├── guix.yml            # Guix channel update
+└── nightly.yml         # Nightly builds
+----
+
+=== 5.2 Documentation Site
+
+.Site Architecture
+[source]
+----
+docs/
+├── antora.yml          # Antora configuration
+├── modules/
+│   ├── ROOT/
+│   │   ├── pages/
+│   │   │   ├── index.adoc
+│   │   │   ├── quickstart.adoc
+│   │   │   └── installation.adoc
+│   │   └── nav.adoc
+│   ├── guide/
+│   │   ├── pages/
+│   │   │   ├── configuration.adoc
+│   │   │   ├── pluralization.adoc
+│   │   │   ├── messageformat.adoc
+│   │   │   └── frameworks.adoc
+│   │   └── nav.adoc
+│   ├── reference/
+│   │   ├── pages/
+│   │   │   ├── api.adoc
+│   │   │   ├── cli.adoc
+│   │   │   └── config.adoc
+│   │   └── nav.adoc
+│   └── contributing/
+│       ├── pages/
+│       │   ├── development.adoc
+│       │   ├── architecture.adoc
+│       │   └── testing.adoc
+│       └── nav.adoc
+└── supplemental-ui/
+    └── partials/
+----
+
+.Wiki Structure
+[source]
+----
+wiki/
+├── Home.md
+├── FAQ.md
+├── Troubleshooting.md
+├── Migration-Guide.md
+├── Changelog.md
+├── Comparison.md
+├── Benchmarks.md
+├── Security.md
+├── Releases/
+│   ├── v1.0.0.md
+│   └── ...
+└── Examples/
+    ├── Express.md
+    ├── Deno-Oak.md
+    └── ...
+----
+
+== Phase 6: Ecosystem & Community (Weeks 19-24)
+
+=== 6.1 Package Distribution
+
+.Distribution Channels
+[cols="1,2,2"]
+|===
+|Channel |Package |Registry
+
+|Guix
+|`guix install i18n`
+|guix.gnu.org
+
+|Nix
+|`nix profile install`
+|nixpkgs, flake registry
+
+|Deno
+|`deno add @i18n/core`
+|deno.land/x, JSR
+
+|npm (compat)
+|`npm install i18n`
+|npmjs.com
+
+|Container
+|`nerdctl pull`
+|ghcr.io, cgr.dev
+
+|Homebrew
+|`brew install i18n`
+|homebrew-tap
+|===
+
+=== 6.2 Community Resources
+
+.Resources
+* Discord server for real-time support
+* GitHub Discussions for Q&A
+* Monthly community calls
+* Contribution guide with mentorship
+* Localization bounty program
+
+== Appendices
+
+=== A. Migration Guide
+
+.From npm to Deno
 [source,typescript]
 ----
-// benchmarks/translate_bench.ts
-Deno.bench("simple translation", () => {
-  i18n.translate("hello")
-})
+// Before (npm)
+const i18n = require('i18n');
 
-Deno.bench("plural translation", () => {
-  i18n.translatePlural("%s item", "%s items", 5)
-})
-
-Deno.bench("messageformat", () => {
-  i18n.translateMf("{N, plural, one{# cat} other{# cats}}", { N: 3 })
-})
+// After (Deno)
+import { I18n } from "https://deno.land/x/i18n/mod.ts";
 ----
 
-== Milestones
+.From JavaScript to ReScript
+[source,rescript]
+----
+// ReScript equivalent
+let i18n = I18n.make({
+  locales: ["en", "de", "fr"],
+  defaultLocale: "en",
+})
 
-[cols="1,1,2"]
+let translated = i18n->I18n.translate("hello")
+----
+
+=== B. Glossary
+
+ADR:: Architecture Decision Record
+CLDR:: Common Locale Data Repository
+ICU:: International Components for Unicode
+SBOM:: Software Bill of Materials
+SLSA:: Supply-chain Levels for Software Artifacts
+WASM:: WebAssembly
+
+=== C. Version History
+
+[cols="1,1,3"]
 |===
-|Version |Target |Milestone
+|Version |Date |Milestone
 
-|0.16.0
-|Current
-|Infrastructure setup (Guix, Nickel, containers, deno.json)
+|2.0.0-alpha
+|Q1 2025
+|ReScript core, WASM modules
 
-|0.17.0
-|Next
-|Deno entry point functional, basic API
+|2.0.0-beta
+|Q2 2025
+|Guix channels, Nickel config
 
-|0.18.0
-|+1
-|ReScript core modules (Locale, Plural, Config)
+|2.0.0-rc
+|Q3 2025
+|CLI complete, docs site live
 
-|0.19.0
-|+2
-|WASM plural engine, performance baselines
-
-|1.0.0-alpha
-|+3
-|Full ReScript core, Deno primary
-
-|1.0.0-beta
-|+4
-|CLI complete, documentation site
-
-|1.0.0
-|+5
-|Production release, npm compatibility stable
+|2.0.0
+|Q4 2025
+|Production release
 |===
-
-== Appendix: Migration Commands
-
-.Quick Start with Deno
-[source,bash]
-----
-# Install from JSR (when published)
-deno add @polyglot/i18n
-
-# Or import directly
-import { I18n } from "jsr:@polyglot/i18n"
-
-# Or use npm compatibility
-import { I18n } from "npm:polyglot-i18n"
-----
-
-.Development Commands
-[source,bash]
-----
-# Deno development
-deno task dev          # Watch mode
-deno task test         # Run tests
-deno task bench        # Benchmarks
-deno task check        # Type check
-
-# ReScript development
-just rescript-build    # Build ReScript
-just rescript-watch    # Watch mode
-just rescript-clean    # Clean build
-
-# Legacy (npm)
-just npm-test          # Run npm tests
-just npm-lint          # Lint JS files
-----
 
 == License
 
-polyglot-i18n is released under the MIT License. Original i18n-node by Marcus Spiegel.
+This roadmap and the i18n-node-enhanced project are released under the MIT License.
 
 ---
 
-_Document version: 2.0_
-_Last updated: 2025-12-07_
+_Document generated: {docdate}_
+_Last updated: {revdate}_
