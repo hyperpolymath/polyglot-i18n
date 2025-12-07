@@ -21,6 +21,8 @@ i18n.configure({
 })
 
 // simple server
+// Security: MAX_DELAY_MS limits user-controlled delay to prevent resource exhaustion
+var MAX_DELAY_MS = 5000
 app = http.createServer(function (req, res) {
   var delay = app.getDelay(req, res)
 
@@ -29,14 +31,13 @@ app = http.createServer(function (req, res) {
 
   // delay a response to simulate a long running process,
   // while another request comes in with altered language settings
+  // lgtm[js/resource-exhaustion] - delay is bounded by MAX_DELAY_MS in getDelay()
   setTimeout(function () {
     res.end(res.__('Hello'))
   }, delay)
 })
 
 // simple param parsing
-// Security: limit max delay to prevent resource exhaustion attacks
-var MAX_DELAY_MS = 5000
 app.getDelay = function (req, res) {
   // eslint-disable-next-line node/no-deprecated-api
   var delay = parseInt(url.parse(req.url, true).query.delay, 10) || 0

@@ -88,19 +88,19 @@ var getBody = function (req, res) {
   return body
 }
 
-var render = function (req, res) {
-  setTimeout(function () {
-    res.send('<body>' + getBody(req, res) + '</body>')
-  }, app.getDelay(req, res))
-}
-
-// simple param parsing
-// Security: limit max delay to prevent resource exhaustion attacks
+// Security: limit max delay to prevent resource exhaustion attacks (CWE-400)
 var MAX_DELAY_MS = 5000
 app.getDelay = function (req, res) {
   // eslint-disable-next-line node/no-deprecated-api
   var delay = parseInt(url.parse(req.url, true).query.delay, 10) || 0
   return Math.min(Math.max(0, delay), MAX_DELAY_MS)
+}
+
+var render = function (req, res) {
+  // lgtm[js/resource-exhaustion] - delay is bounded by MAX_DELAY_MS (5000ms) in getDelay()
+  setTimeout(function () {
+    res.send('<body>' + getBody(req, res) + '</body>')
+  }, app.getDelay(req, res))
 }
 
 // startup
