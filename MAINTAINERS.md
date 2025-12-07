@@ -1,21 +1,36 @@
 # Maintainers
 
-This document lists the maintainers of the i18n-node-enhanced project and their areas of responsibility.
+This document lists the maintainers of the polyglot-i18n project and their areas of responsibility.
 
 ## Project Lead
 
-**Marcus Spiegel** (@mashpie)
-- **Email:** marcus.spiegel@gmail.com
-- **Role:** Project Lead, Core Maintainer, Original Author
+**hyperpolymath** (@hyperpolymath)
+- **Role:** Project Lead, Core Maintainer
 - **Responsibilities:**
   - Overall project direction and governance
-  - Core library architecture (i18n.js, index.js)
+  - Core library architecture
+  - ReScript/WASM components
+  - Guix/Nix packaging
+  - Container infrastructure
   - Release management and versioning
   - Security vulnerability coordination
-  - Community management
-- **Time:** 2011-present
-- **Location:** Hamburg, Germany
-- **Availability:** CET/CEST timezone
+- **Time:** 2025-present
+
+## Original Author
+
+This project is a fork of [i18n-node](https://github.com/mashpie/i18n-node), originally created by:
+
+**Marcus Spiegel** (@mashpie)
+- **Email:** marcus.spiegel@gmail.com
+- **Role:** Original Author (i18n-node)
+- **Contributions:**
+  - Core translation engine design
+  - Original API design (__(), __n(), __mf(), etc.)
+  - Express/restify integration patterns
+  - MessageFormat and Mustache integration
+- **Time:** 2011-2025
+
+We are deeply grateful for Marcus Spiegel's foundational work that made this project possible.
 
 ## Core Maintainers
 
@@ -23,32 +38,59 @@ Currently seeking additional core maintainers. See [CONTRIBUTING.md](CONTRIBUTIN
 
 ## Component Maintainers
 
-### Enterprise Adapters
+### ReScript Core
 **Status:** Seeking maintainers
-- **Components:** `adapters/erp/`, `adapters/crm/`, `adapters/ais/`, `adapters/collaboration/`, `adapters/ecommerce/`
+- **Components:** `bindings/rescript/`, `src/*.res`
 - **Responsibilities:**
-  - Enterprise system integration maintenance
-  - API compatibility updates
-  - Adapter-specific security patches
-  - Documentation for enterprise deployments
-
-### Polyglot Bindings
-**Status:** Seeking maintainers
-- **Components:** `bindings/rescript/`, `deno/`, `wasm/`
-- **Responsibilities:**
-  - Language binding maintenance
-  - Cross-language FFI contracts
+  - ReScript type definitions and bindings
+  - Core translation logic migration
+  - Type safety across FFI boundaries
   - Performance optimization
-  - Type definition accuracy
 
-### Automation & API
+### WASM Runtime
 **Status:** Seeking maintainers
-- **Components:** `automation/api.js`, `observability/telemetry.js`, `audit/forensics.js`
+- **Components:** `wasm/`, `crates/`
 - **Responsibilities:**
-  - REST API maintenance
-  - Observability provider integrations
-  - Audit system compliance
-  - Webhook infrastructure
+  - Rust WASM module maintenance
+  - Performance-critical path optimization
+  - Memory management and safety
+  - Cross-platform compatibility
+
+### Guix/Nix Packaging
+**Status:** Seeking maintainers
+- **Components:** `guix.scm`, `channels.scm`, `flake.nix`
+- **Responsibilities:**
+  - GNU Guix package definitions
+  - Nix flake maintenance
+  - Reproducible build infrastructure
+  - Development environment manifests
+
+### Container Infrastructure
+**Status:** Seeking maintainers
+- **Components:** `container/`, `Containerfile`, `apko.yaml`
+- **Responsibilities:**
+  - Chainguard Wolfi image maintenance
+  - Multi-arch build support
+  - Security hardening
+  - Container composition
+
+### Deno Runtime
+**Status:** Seeking maintainers
+- **Components:** `deno/`, `mod.ts`
+- **Responsibilities:**
+  - Deno module maintenance
+  - TypeScript definitions
+  - Deno Deploy compatibility
+  - Runtime parity with Node.js
+
+### CLI & Documentation
+**Status:** Seeking maintainers
+- **Components:** `tools/cli.js`, `man/`, `docs/`
+- **Responsibilities:**
+  - CLI command implementation
+  - Man page maintenance
+  - AsciiDoc documentation
+  - Example maintenance
 
 ### Framework Examples
 **Status:** Seeking maintainers
@@ -63,7 +105,7 @@ Currently seeking additional core maintainers. See [CONTRIBUTING.md](CONTRIBUTIN
 
 List of former maintainers who have contributed significantly to the project:
 
-- None yet (project originally solo-maintained)
+- **Marcus Spiegel** (@mashpie) - Original author of i18n-node (2011-2025)
 
 We thank all emeritus maintainers for their contributions and service to the project.
 
@@ -73,10 +115,10 @@ We thank all emeritus maintainers for their contributions and service to the pro
 
 To become a maintainer, you should:
 
-1. **Sustained Contribution:** Have a track record of quality contributions over 6+ months
+1. **Sustained Contribution:** Have a track record of quality contributions over 3+ months
 2. **Domain Expertise:** Demonstrate expertise in your proposed maintenance area
 3. **Community Engagement:** Actively participate in discussions, reviews, and support
-4. **Alignment:** Understand and align with project goals and values
+4. **Alignment:** Understand and align with project goals (ReScript-first, WASM-accelerated, polyglot)
 5. **Availability:** Commit to regular maintenance activities (minimum 4-8 hours/month)
 
 ### Process
@@ -87,7 +129,7 @@ To become a maintainer, you should:
 4. **Vote:** Existing maintainers vote (requires unanimous approval for <5 maintainers, 75% for 5+)
 5. **Onboarding:** New maintainers receive:
    - Repository write access
-   - NPM publish rights (after 3 months)
+   - NPM/JSR publish rights (after 3 months)
    - Security advisory access
    - Maintainer documentation
    - Pair programming sessions with existing maintainers
@@ -124,7 +166,7 @@ To become a maintainer, you should:
 ## Maintainer Privileges
 
 - **Write Access:** Direct commit access to the repository
-- **Release Authority:** Ability to publish releases to npm
+- **Release Authority:** Ability to publish releases to npm/JSR
 - **Security Access:** Access to private security advisories
 - **Decision Making:** Vote on major project decisions
 - **Recognition:** Listed in humans.txt, MAINTAINERS.md, and project documentation
@@ -174,12 +216,12 @@ If a maintainer is inactive for 6+ months without prior notice:
 
 ### Private (Maintainers Only)
 - **Security Advisories:** GitHub Security Advisory
-- **Maintainer Discussion:** Private maintainer mailing list (to be established)
+- **Maintainer Discussion:** Private maintainer channel (to be established)
 - **Emergency Contact:** Email to project lead
 
 ## Maintainer Meetings
 
-**Status:** Not currently scheduled (solo-maintained)
+**Status:** Not currently scheduled
 
 When multiple maintainers exist:
 - **Frequency:** Monthly (first Thursday, 15:00 UTC)
@@ -192,7 +234,7 @@ When multiple maintainers exist:
 This governance structure is designed for current project scale. As the project grows:
 
 - May adopt more formal governance (e.g., Technical Steering Committee)
-- May establish Working Groups for specialized areas
+- May establish Working Groups for specialized areas (ReScript, WASM, Packaging)
 - May create Contributor Ladder (contributor → committer → maintainer → TSC)
 
 Changes to governance require approval from all active maintainers.
@@ -200,11 +242,10 @@ Changes to governance require approval from all active maintainers.
 ## Contact
 
 - **General:** Open a GitHub Discussion
-- **Private Maintainer Inquiries:** marcus.spiegel@gmail.com
 - **Security:** See [SECURITY.md](SECURITY.md)
 
 ---
 
-**Last Updated:** 2025-11-22
-**Document Version:** 1.0
+**Last Updated:** 2025-12-07
+**Document Version:** 2.0
 **Review Cycle:** Quarterly

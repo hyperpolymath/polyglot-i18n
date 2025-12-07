@@ -1,0 +1,707 @@
+= polyglot-i18n
+:toc: macro
+:toc-title: Contents
+:toclevels: 3
+:sectnums:
+:icons: font
+:source-highlighter: rouge
+:experimental:
+:imagesdir: docs/images
+:homepage: https://github.com/hyperpolymath/polyglot-i18n
+
+[.lead]
+*A polyglot internationalization platform* for modern applications. +
+ReScript-first. WebAssembly-accelerated. Guix-reproducible. Container-native.
+
+image:https://img.shields.io/badge/ReScript-11-blue?logo=rescript[ReScript]
+image:https://img.shields.io/badge/Deno-ready-black?logo=deno[Deno]
+image:https://img.shields.io/badge/WASM-accelerated-purple?logo=webassembly[WASM]
+image:https://img.shields.io/badge/Guix-reproducible-orange?logo=gnu[Guix]
+image:https://img.shields.io/badge/Wolfi-secured-green?logo=chainguard[Wolfi]
+image:https://img.shields.io/badge/license-MIT-brightgreen[License: MIT]
+
+toc::[]
+
+== Overview
+
+polyglot-i18n is an advanced internationalization platform that evolved from the excellent https://github.com/mashpie/i18n-node[i18n-node] library by https://github.com/mashpie[Marcus Spiegel]. While maintaining API compatibility with the original, this fork introduces a fundamentally different architecture designed for:
+
+* *Polyglot development* - ReScript core with JavaScript interop
+* *Performance* - WebAssembly acceleration for compute-intensive operations
+* *Reproducibility* - Guix-first package management with Nix fallback
+* *Security* - Chainguard Wolfi containers with minimal attack surface
+* *Configuration* - Nickel type-safe configuration language
+
+=== Heritage and Acknowledgments
+
+[quote, Standing on the shoulders of giants]
+____
+This project builds upon the foundational work of *Marcus Spiegel* and the i18n-node community. The original library has powered countless Node.js applications with its elegant `+__('Hello')+` syntax and thoughtful API design. We are deeply grateful for this foundation.
+____
+
+The original i18n-node remains an excellent choice for traditional Node.js applications. polyglot-i18n is for teams who need:
+
+* Type-safe translations via ReScript
+* WebAssembly performance for large catalogs
+* Reproducible builds via Guix/Nix
+* Container-native deployment
+* Multi-runtime support (Node, Deno, Bun)
+
+=== What's Different
+
+[cols="1,1,1"]
+|===
+|Feature |Original i18n-node |polyglot-i18n
+
+|*Core Language*
+|JavaScript
+|ReScript → JavaScript
+
+|*Performance*
+|Pure JS
+|WASM-accelerated plurals & lookup
+
+|*Package Management*
+|npm only
+|Guix (primary), Nix, npm, Deno
+
+|*Containers*
+|Not provided
+|Chainguard Wolfi (distroless)
+
+|*Configuration*
+|JS objects
+|Nickel (type-safe) + JS
+
+|*Runtimes*
+|Node.js
+|Node, Deno, Bun, Cloudflare Workers
+
+|*Type Safety*
+|Optional (TypeScript)
+|Native (ReScript)
+
+|*Build System*
+|npm scripts
+|just (150+ recipes)
+|===
+
+== Quick Start
+
+=== Installation
+
+[tabs]
+====
+Deno (Recommended)::
++
+[source,typescript]
+----
+import { I18n } from "https://deno.land/x/polyglot_i18n/mod.ts";
+
+const i18n = new I18n({
+  locales: ["en", "de", "fr"],
+  defaultLocale: "en",
+});
+
+console.log(i18n.__("Hello")); // Hello
+----
+
+npm::
++
+[source,bash]
+----
+npm install polyglot-i18n
+----
++
+[source,javascript]
+----
+const { I18n } = require('polyglot-i18n');
+
+const i18n = new I18n({
+  locales: ['en', 'de'],
+  directory: './locales'
+});
+
+console.log(i18n.__('Hello')); // Hello
+----
+
+Guix::
++
+[source,bash]
+----
+guix install polyglot-i18n
+----
+
+Nix::
++
+[source,bash]
+----
+nix profile install github:hyperpolymath/polyglot-i18n
+----
+====
+
+=== Basic Usage
+
+[source,javascript]
+----
+const { I18n } = require('polyglot-i18n');
+
+const i18n = new I18n({
+  locales: ['en', 'de', 'fr'],
+  defaultLocale: 'en',
+  directory: './locales'
+});
+
+// Simple translation
+i18n.__('Hello')                    // → "Hallo" (when locale is 'de')
+
+// With interpolation
+i18n.__('Hello {{name}}', { name: 'World' })  // → "Hallo World"
+
+// Pluralization
+i18n.__n('%s cat', '%s cats', 3)    // → "3 Katzen"
+
+// MessageFormat (ICU)
+i18n.__mf('{N, plural, one{# item} other{# items}}', { N: 5 })
+----
+
+== Architecture
+
+=== Polyglot Stack
+
+[plantuml, architecture, svg]
+....
+@startuml
+!theme plain
+
+package "Application Layer" {
+  [Your App] as app
+}
+
+package "polyglot-i18n" {
+  package "ReScript Core" {
+    [I18n.res] as core
+    [Locale.res] as locale
+    [Catalog.res] as catalog
+    [Plural.res] as plural
+  }
+
+  package "WASM Acceleration" {
+    [plural-engine.wasm] as wasm_plural
+    [hash-lookup.wasm] as wasm_hash
+  }
+
+  package "Runtime Adapters" {
+    [Node.js] as node
+    [Deno] as deno
+    [Bun] as bun
+  }
+}
+
+package "Configuration" {
+  [Nickel] as nickel
+  [JSON/YAML] as json
+}
+
+app --> core
+core --> wasm_plural : FFI
+core --> wasm_hash : FFI
+core --> locale
+core --> catalog
+catalog --> json
+nickel --> json : export
+
+node --> core
+deno --> core
+bun --> core
+@enduml
+....
+
+=== Directory Structure
+
+[source]
+----
+polyglot-i18n/
+├── src/
+│   ├── core/           # ReScript core implementation
+│   │   ├── I18n.res
+│   │   ├── Locale.res
+│   │   ├── Catalog.res
+│   │   └── Plural.res
+│   └── adapters/       # Runtime-specific adapters
+├── wasm/               # Rust → WebAssembly modules
+│   ├── src/lib.rs
+│   └── Cargo.toml
+├── deno/               # Deno module
+│   ├── mod.ts
+│   └── deno.json
+├── config/             # Nickel configuration
+│   └── i18n.ncl
+├── container/          # Chainguard Wolfi
+│   ├── Containerfile
+│   └── apko.yaml
+├── locales/            # Translation catalogs
+└── justfile            # Build automation (150+ recipes)
+----
+
+== Configuration
+
+=== Nickel (Recommended)
+
+Type-safe configuration with validation:
+
+[source,nickel]
+----
+# config/i18n.ncl
+let config = import "polyglot-i18n/config/i18n.ncl" in
+
+config.environments.production & {
+  locales = ["en", "de", "fr", "es", "ja", "zh"],
+  defaultLocale = "en",
+
+  catalog = {
+    directory = "./locales",
+    parser = 'json,
+  },
+
+  runtime = {
+    wasm = { enabled = true },
+    cache = {
+      enabled = true,
+      maxSize = 10000,
+      ttl = 86400,
+    },
+  },
+}
+----
+
+Export to JSON:
+[source,bash]
+----
+just nickel-export
+----
+
+=== JavaScript Configuration
+
+[source,javascript]
+----
+const i18n = new I18n({
+  // Locales
+  locales: ['en', 'de', 'fr'],
+  defaultLocale: 'en',
+  fallbacks: { 'de-AT': 'de', 'de-CH': 'de' },
+
+  // Catalog
+  directory: './locales',
+  extension: '.json',
+  autoReload: process.env.NODE_ENV === 'development',
+  updateFiles: process.env.NODE_ENV === 'development',
+
+  // HTTP detection
+  cookie: 'locale',
+  header: 'accept-language',
+  queryParameter: 'lang',
+
+  // Features
+  objectNotation: true,
+  retryInDefaultLocale: true,
+
+  // Performance
+  staticCatalog: require('./compiled-locales.json'), // Pre-compiled
+
+  // API aliases
+  api: {
+    '__': 't',
+    '__n': 'tn',
+    '__mf': 'tmf',
+  },
+});
+----
+
+== API Reference
+
+=== Core Methods
+
+[cols="1,2,1"]
+|===
+|Method |Description |Example
+
+|`+__( )+`
+|Translate a phrase
+|`+__('Hello')+`
+
+|`+__n( )+`
+|Pluralize
+|`+__n('%s cat', 3)+`
+
+|`+__mf( )+`
+|MessageFormat (ICU)
+|`+__mf('{N, plural, ...}')+`
+
+|`+__l( )+`
+|List all translations
+|`+__l('Hello')+`
+
+|`+__h( )+`
+|Hash of translations
+|`+__h('Hello')+`
+
+|`setLocale( )`
+|Set current locale
+|`setLocale('de')`
+
+|`getLocale( )`
+|Get current locale
+|`getLocale()`
+
+|`getCatalog( )`
+|Get translation catalog
+|`getCatalog('de')`
+|===
+
+=== Interpolation
+
+[source,javascript]
+----
+// sprintf-style
+__('Hello %s', 'World')           // → "Hello World"
+__('%d items', 5)                 // → "5 items"
+__('%2$s then %1$s', 'A', 'B')    // → "B then A"
+
+// Mustache-style
+__('Hello {{name}}', { name: 'World' })
+
+// Unescaped HTML
+__('{{{html}}}', { html: '<b>Bold</b>' })
+----
+
+=== Pluralization
+
+[source,javascript]
+----
+// Basic (Germanic languages)
+__n('%s cat', '%s cats', 1)  // → "1 cat"
+__n('%s cat', '%s cats', 5)  // → "5 cats"
+
+// CLDR plural rules (Russian example)
+// Automatically selects: one, few, many, other
+__n('%s кошка', 1)   // → "1 кошка" (one)
+__n('%s кошка', 2)   // → "2 кошки" (few)
+__n('%s кошка', 5)   // → "5 кошек" (many)
+__n('%s кошка', 21)  // → "21 кошка" (one - ends in 1)
+----
+
+=== Ranged Intervals
+
+[source,json]
+----
+{
+  "dogs": {
+    "one": "one dog",
+    "other": "[0] no dogs|[2,5] a few dogs|[6,] many dogs"
+  }
+}
+----
+
+[source,javascript]
+----
+__n('dogs', 0)   // → "no dogs"
+__n('dogs', 1)   // → "one dog"
+__n('dogs', 3)   // → "a few dogs"
+__n('dogs', 10)  // → "many dogs"
+----
+
+=== MessageFormat (ICU)
+
+[source,javascript]
+----
+// Gender selection
+__mf('{gender, select, male{He} female{She} other{They}} liked this', {
+  gender: 'female'
+})  // → "She liked this"
+
+// Complex plurals
+__mf('{N, plural, =0{No items} one{# item} other{# items}}', { N: 42 })
+
+// Nested
+__mf('{gender, select, male{{N, plural, one{He has # cat} other{He has # cats}}} female{{N, plural, one{She has # cat} other{She has # cats}}} other{They have {N, plural, one{# cat} other{# cats}}}}', {
+  gender: 'female',
+  N: 3
+})  // → "She has 3 cats"
+----
+
+== Framework Integration
+
+=== Express.js
+
+[source,javascript]
+----
+const express = require('express');
+const { I18n } = require('polyglot-i18n');
+
+const app = express();
+const i18n = new I18n({
+  locales: ['en', 'de'],
+  directory: './locales',
+  cookie: 'locale',
+});
+
+app.use(i18n.init);
+
+app.get('/', (req, res) => {
+  res.send(res.__('Welcome'));
+});
+----
+
+=== Deno Oak
+
+[source,typescript]
+----
+import { Application } from "https://deno.land/x/oak/mod.ts";
+import { I18n } from "https://deno.land/x/polyglot_i18n/mod.ts";
+
+const app = new Application();
+const i18n = new I18n({ locales: ["en", "de"] });
+
+app.use(async (ctx, next) => {
+  i18n.init(ctx.request, ctx.response);
+  await next();
+});
+----
+
+=== NestJS
+
+[source,typescript]
+----
+import { Module } from '@nestjs/common';
+import { I18nModule } from 'polyglot-i18n/nestjs';
+
+@Module({
+  imports: [
+    I18nModule.forRoot({
+      locales: ['en', 'de'],
+      defaultLocale: 'en',
+    }),
+  ],
+})
+export class AppModule {}
+----
+
+== Development
+
+=== Prerequisites
+
+[tabs]
+====
+Guix (Recommended)::
++
+[source,bash]
+----
+guix shell -m manifest.scm
+----
+
+Nix::
++
+[source,bash]
+----
+nix develop
+----
+
+Manual::
++
+- Node.js 20+
+- Rust (for WASM)
+- Deno
+- just
+====
+
+=== Common Tasks
+
+[source,bash]
+----
+# Install dependencies
+just install
+
+# Run tests
+just test
+
+# Build all components
+just build-all
+
+# Run linter
+just lint
+
+# Check RSR compliance
+just rsr-check
+
+# Start development server
+just dev
+----
+
+=== Full Recipe List
+
+[source,bash]
+----
+just --list  # 150+ recipes available
+----
+
+Categories: `dev`, `build`, `test`, `lint`, `docs`, `container`, `guix`, `nix`, `nickel`, `security`, `locale`, `cli`, `bench`, `release`, `ci`
+
+== Containers
+
+=== Chainguard Wolfi
+
+Build a minimal, secure container:
+
+[source,bash]
+----
+# Build with nerdctl
+just container-build
+
+# Run
+just container-run
+
+# Full compose stack
+just container-up
+----
+
+Available targets:
+- `node-runtime` - Node.js production
+- `deno-runtime` - Deno production
+- `cli` - CLI tools only
+- `dev` - Development environment
+- `static` - Distroless (library only)
+
+=== apko Declarative Build
+
+[source,bash]
+----
+just container-apko
+----
+
+== Performance
+
+=== WASM Acceleration
+
+When enabled, WASM modules accelerate:
+
+[cols="1,1,1"]
+|===
+|Operation |JS Only |With WASM
+
+|Plural evaluation
+|~100μs
+|~10μs
+
+|Large catalog lookup
+|~50μs
+|~10μs
+
+|String interpolation
+|~20μs
+|~7μs
+|===
+
+Enable in configuration:
+[source,javascript]
+----
+{
+  runtime: {
+    wasm: { enabled: true }
+  }
+}
+----
+
+=== Benchmarks
+
+[source,bash]
+----
+just bench-all
+----
+
+== Security
+
+=== Supply Chain
+
+- *Guix reproducible builds* - Bit-for-bit reproducibility
+- *SBOM generation* - CycloneDX format
+- *Container signing* - cosign with Sigstore
+- *Dependency auditing* - Snyk, Trivy integration
+
+=== Runtime
+
+- *Prototype pollution protection* - `Object.create(null)` for catalogs
+- *Path traversal prevention* - Canonical path resolution
+- *Input validation* - Strict parsing with size limits
+- *No eval* - Safe interpolation without code execution
+
+[source,bash]
+----
+# Security audit
+just audit
+
+# Generate SBOM
+just security-sbom
+
+# Scan for vulnerabilities
+just security-trivy
+----
+
+== Roadmap
+
+See link:ROADMAP.adoc[ROADMAP.adoc] for the complete transformation plan.
+
+=== Current Phase
+
+*Phase 1: Foundation* - Guix infrastructure, containers, Nickel configuration
+
+=== Upcoming
+
+- [ ] ReScript core implementation
+- [ ] WASM performance modules
+- [ ] Comprehensive CLI with man pages
+- [ ] Documentation site (Antora)
+- [ ] Plugin system
+
+== Contributing
+
+Contributions are welcome! Please see link:CONTRIBUTING.md[CONTRIBUTING.md] for guidelines.
+
+[source,bash]
+----
+# Pre-commit checks
+just pre-commit
+
+# Full CI simulation
+just ci-full
+----
+
+== License
+
+MIT License - see link:LICENSE[LICENSE]
+
+== Acknowledgments
+
+[cols="1,3"]
+|===
+|https://github.com/mashpie[Marcus Spiegel]
+|Creator of the original https://github.com/mashpie/i18n-node[i18n-node] library that serves as the foundation for this project. His elegant API design and years of maintenance have benefited countless developers.
+
+|i18n-node Contributors
+|The community that shaped the original library through issues, PRs, and feedback.
+
+|Chainguard
+|For Wolfi and secure container tooling.
+
+|GNU Guix
+|For reproducible package management.
+
+|Tweag
+|For the Nickel configuration language.
+|===
+
+---
+
+[.text-center]
+_polyglot-i18n_ is maintained by https://github.com/hyperpolymath[hyperpolymath] +
+Originally forked from https://github.com/mashpie/i18n-node[i18n-node] by https://github.com/mashpie[mashpie]

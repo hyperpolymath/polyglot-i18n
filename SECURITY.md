@@ -2,27 +2,26 @@
 
 ## Supported Versions
 
-We actively provide security updates for the following versions of i18n:
+We actively provide security updates for the following versions of polyglot-i18n:
 
 | Version | Supported          | End of Life |
 | ------- | ------------------ | ----------- |
-| 0.15.x  | :white_check_mark: | -           |
-| 0.14.x  | :white_check_mark: | TBD         |
-| 0.13.x  | :warning: Critical fixes only | 2025-12-31 |
-| < 0.13.0 | :x:               | EOL         |
+| 0.16.x  | :white_check_mark: | -           |
+| 0.15.x  | :white_check_mark: | TBD         |
+| 0.14.x  | :warning: Critical fixes only | 2025-12-31 |
+| < 0.14.0 | :x:               | EOL         |
 
 ## Reporting a Vulnerability
 
 ### How to Report
 
-If you discover a security vulnerability in i18n, please report it responsibly:
+If you discover a security vulnerability in polyglot-i18n, please report it responsibly:
 
 **Preferred Method:**
-- Email: security@i18n-node.org (if available) or use GitHub Security Advisory
-- GitHub Security Advisory: https://github.com/mashpie/i18n-node/security/advisories/new
+- GitHub Security Advisory: https://github.com/hyperpolymath/polyglot-i18n/security/advisories/new
 
 **Alternative Method:**
-- Tidelift security contact: https://tidelift.com/security
+- Open a private security advisory on GitHub
 
 ### What to Include
 
@@ -359,4 +358,4 @@ For security-related questions or concerns:
 - **General Questions**: Open a GitHub issue
 - **Commercial Support**: Contact through Tidelift
 
-Last Updated: 2025-11-22
+Last Updated: 2025-12-07

@@ -1,28 +1,49 @@
 {
-  "name": "i18n",
-  "description": "lightweight translation module with dynamic json storage",
-  "version": "0.15.3",
-  "homepage": "http://github.com/mashpie/i18n-node",
+  "name": "polyglot-i18n",
+  "description": "Polyglot i18n - ReScript-first, WASM-accelerated translation module with dynamic JSON storage",
+  "version": "0.16.0",
+  "homepage": "https://github.com/hyperpolymath/polyglot-i18n",
   "repository": {
     "type": "git",
-    "url": "http://github.com/mashpie/i18n-node.git"
+    "url": "https://github.com/hyperpolymath/polyglot-i18n.git"
   },
-  "author": "Marcus Spiegel <marcus.spiegel@gmail.com>",
-  "funding": {
-    "url": "https://github.com/sponsors/mashpie"
-  },
+  "author": "hyperpolymath",
+  "contributors": [
+    {
+      "name": "Marcus Spiegel",
+      "email": "marcus.spiegel@gmail.com",
+      "url": "https://github.com/mashpie"
+    }
+  ],
   "main": "./index",
   "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "i18n.js",
     "index.js",
+    "index.mjs",
     "index.d.ts",
-    "SECURITY.md"
+    "SECURITY.md",
+    "locales/"
   ],
   "keywords": [
-    "template",
     "i18n",
-    "l10n"
+    "l10n",
+    "internationalization",
+    "localization",
+    "translation",
+    "template",
+    "rescript",
+    "wasm",
+    "deno",
+    "polyglot"
   ],
   "directories": {
     "lib": "."
@@ -58,20 +79,22 @@
     "supertest": "^6.3.4"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "scripts": {
     "test": "mocha --exit",
     "test-ci": "nyc mocha -- --exit",
-    "coverage": "nyc report --reporter=lcov"
+    "coverage": "nyc report --reporter=lcov",
+    "lint": "eslint i18n.js test/",
+    "lint:fix": "eslint --fix i18n.js test/",
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
   },
   "license": "MIT",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "bugs": {
+    "url": "https://github.com/hyperpolymath/polyglot-i18n/issues"
   }
 }

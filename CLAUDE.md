@@ -1,34 +1,46 @@
-# CLAUDE.md - i18n-node-enhanced
+# CLAUDE.md - polyglot-i18n
 
 ## Project Overview
 
-**i18n-node-enhanced** is a lightweight translation module with dynamic JSON storage for Node.js applications. It provides internationalization (i18n) and localization (l10n) support with a simple API.
+**polyglot-i18n** is a ReScript-first, WASM-accelerated translation module with dynamic JSON storage. Fork of [i18n-node](https://github.com/mashpie/i18n-node) by Marcus Spiegel, reimagined for modern polyglot development.
 
 **Key Features:**
-- Dynamic JSON storage for translations
+- ReScript-first implementation (TypeScript eliminated)
+- WASM-accelerated hot paths (Rust)
+- Multi-runtime: Node.js, Deno, Bun
 - Common `__('...')` syntax for translations
-- Support for multiple locales
 - Plural forms handling with CLDR rules
 - MessageFormat support for advanced formatting
 - Mustache template support
 - sprintf-style formatting
 - Object notation for hierarchical translations
-- Auto-reload capability for development
-- Compatible with Express, restify, and other frameworks
+- Guix-first, Nix fallback packaging
+- Chainguard Wolfi containers
 
 ## Architecture
 
 ### Core Components
 
-1. **i18n.js** (43KB) - Main module implementing the I18n class
+1. **i18n.js** - Legacy JavaScript implementation (being migrated to ReScript)
    - Translation engine
    - Locale management
    - File I/O for JSON catalogs
    - API methods for translations
 
-2. **index.js** - Entry point that exports the I18n class and singleton
+2. **bindings/rescript/** - ReScript type definitions and bindings
+   - Type-safe FFI to JavaScript core
+   - Future: Pure ReScript implementation
 
-3. **locales/** - Translation catalog storage (JSON files per locale)
+3. **wasm/** - Rust WASM module (planned)
+   - High-performance plural rules
+   - MessageFormat parsing
+   - Interpolation engine
+
+4. **deno/** - Deno runtime module
+   - TypeScript definitions
+   - Deno Deploy compatible
+
+5. **locales/** - Translation catalog storage (JSON files per locale)
 
 ### Dependencies
 
@@ -51,23 +63,54 @@
 ## Directory Structure
 
 ```
-i18n-node-enhanced/
-├── i18n.js                 # Main implementation
+polyglot-i18n/
+├── i18n.js                 # Main implementation (legacy JS)
 ├── index.js                # Module entry point
 ├── package.json            # Package configuration
-├── README.md               # User documentation
+├── README.adoc             # User documentation (AsciiDoc)
+├── ROADMAP.adoc            # Development roadmap
 ├── SECURITY.md             # Security policy
 ├── CHANGELOG.md            # Version history
+├── justfile                # Task runner (150+ recipes)
+│
+├── bindings/
+│   └── rescript/           # ReScript bindings
+│       ├── I18n.res        # Type definitions
+│       └── I18n.resi       # Interface
+│
+├── deno/                   # Deno module
+│   └── mod.ts              # Deno entry point
+│
+├── wasm/                   # WASM module (planned)
+│   └── src/                # Rust source
+│
+├── config/
+│   └── i18n.ncl            # Nickel type-safe configuration
+│
+├── container/
+│   ├── Containerfile       # Multi-stage container build
+│   ├── apko.yaml           # Declarative image build
+│   └── nerdctl-compose.yaml # Container composition
+│
+├── guix.scm                # GNU Guix package definitions
+├── channels.scm            # Guix channel configuration
+├── manifest.scm            # Development environment manifest
+├── flake.nix               # Nix flake (fallback)
+│
 ├── locales/                # Default locale files
 │   ├── en.json
 │   ├── de.json
 │   ├── fr.json
 │   └── ...
+│
 ├── examples/               # Usage examples
 │   ├── express4-cookie/
-│   ├── express4-setLocale/
-│   ├── node-http-autoreload/
-│   └── singleton/
+│   ├── fastify/
+│   ├── hono/
+│   ├── koa/
+│   ├── nestjs/
+│   └── nextjs/
+│
 ├── test/                   # Test suite
 └── .github/                # CI/CD workflows
 ```
@@ -91,12 +134,6 @@ i18n-node-enhanced/
 - `setLocale(locale)` - Set current locale
 - `getLocale()` - Get current locale
 - `getCatalog(locale)` - Get translation catalog
-
-**Internal Methods:**
-- `translate()` - Core translation logic
-- `parseLoadLocales()` - Load locale files
-- `writeFile()` - Persist translations to disk
-- `guessLanguage()` - Detect locale from headers/cookies
 
 ### Configuration Options
 
@@ -133,35 +170,45 @@ i18n-node-enhanced/
 
 ## Development Workflow
 
-### Setup
+### Using justfile (Recommended)
+
+```bash
+just                        # Show all available recipes
+just dev                    # Start development environment
+just test                   # Run all tests
+just lint                   # Run linters
+just build                  # Build all targets
+```
+
+### Using npm (Legacy)
 
 ```bash
 npm install
-```
-
-### Testing
-
-```bash
 npm test                    # Run test suite
 npm run test-ci             # Run with coverage
 npm run coverage            # Generate coverage report
 ```
 
-### Linting
+### Using Guix (Preferred)
 
 ```bash
-npx eslint i18n.js test/    # Check linting
-npx eslint --fix i18n.js    # Auto-fix issues
+guix shell -m manifest.scm  # Enter development environment
+just test                   # Run tests
 ```
 
-### Examples
-
-Each example in `/examples` is self-contained:
+### Using Nix (Fallback)
 
 ```bash
-cd examples/express4-cookie
-node index.js
-npm test  # Run example tests
+nix develop                 # Enter development environment
+just test                   # Run tests
+```
+
+### Using Containers
+
+```bash
+just container-build        # Build container image
+just container-run          # Run container
+just container-dev          # Development container with shell
 ```
 
 ## Testing Strategy
@@ -181,10 +228,12 @@ npm test  # Run example tests
 - Object notation tests
 - Fallback mechanism tests
 
-**Running Specific Tests:**
+**Running Tests:**
 ```bash
-npx mocha test/i18n.configure.js
-npx mocha test/i18n.translate.js
+just test                   # All tests
+just test-unit              # Unit tests only
+just test-integration       # Integration tests
+just test-coverage          # With coverage report
 ```
 
 ## Important Patterns
@@ -193,13 +242,13 @@ npx mocha test/i18n.translate.js
 
 **Instance (Recommended):**
 ```javascript
-const { I18n } = require('i18n')
+const { I18n } = require('polyglot-i18n')
 const i18n = new I18n({ locales: ['en', 'de'] })
 ```
 
 **Singleton:**
 ```javascript
-const i18n = require('i18n')
+const i18n = require('polyglot-i18n')
 i18n.configure({ locales: ['en', 'de'] })
 ```
 
@@ -242,44 +291,56 @@ __('greeting.formal')                    // Access nested
 __('greeting.formal:Hello')              // With default
 ```
 
-## Common Tasks
+## Configuration with Nickel
 
-### Adding a New Locale
+Type-safe configuration using Nickel:
 
-1. Add to configuration: `locales: ['en', 'de', 'fr']`
-2. Create file: `locales/fr.json` with `{}`
-3. Translations auto-populate on first use
-
-### Customizing Plural Rules
-
-Edit locale JSON file:
-```json
-{
-  "%s dog": {
-    "one": "one dog",
-    "few": "a few dogs",
-    "many": "many dogs",
-    "other": "dogs"
-  }
-}
-```
-
-### Using Interval Notation
-
-```json
-{
-  "dogs": {
-    "other": "[0]no dog|[1]one dog|[2,5]some dogs|too many dogs"
-  }
-}
-```
-
-### Debug Logging
-
-Enable with environment variable:
 ```bash
-DEBUG=i18n:* node app.js        # All logs
-DEBUG=i18n:warn,i18n:error node app.js  # Warnings/errors only
+# Generate JSON config from Nickel
+just nickel-export development > config.json
+
+# Validate configuration
+just nickel-check
+
+# Available presets
+just nickel-export production
+just nickel-export staging
+just nickel-export test
+```
+
+## Container Workflows
+
+```bash
+# Build with apko (minimal, reproducible)
+just container-apko-build
+
+# Build with Containerfile
+just container-build
+
+# Run with nerdctl/podman/docker
+just container-run
+
+# Development environment
+just container-dev
+
+# Full stack with compose
+just container-compose-up
+```
+
+## Guix/Nix Workflows
+
+```bash
+# Guix development shell
+guix shell -m manifest.scm
+
+# Build Guix package
+guix build -f guix.scm
+
+# Nix development shell
+nix develop
+
+# Build with Nix
+nix build
 ```
 
 ## Code Style
@@ -303,36 +364,45 @@ DEBUG=i18n:warn,i18n:error node app.js  # Warnings/errors only
 - Avoid user input in translation keys (dynamic key creation)
 - Sanitize variables in translations
 - Use `{{var}}` (escaped) vs `{{{var}}}` (unescaped) carefully
+- Container images use Chainguard Wolfi (minimal attack surface)
 
 ## Version Information
 
-- **Current Version:** 0.15.3
-- **Node Compatibility:** >= 10
+- **Current Version:** 0.16.0
+- **Node Compatibility:** >= 18
+- **Deno Compatibility:** >= 1.40
 - **License:** MIT
+- **Original:** Based on i18n-node by Marcus Spiegel
 
 ## Contributing
 
 1. Fork repository
 2. Create feature branch
 3. Add tests for new features
-4. Ensure tests pass: `npm test`
-5. Run linting: `npx eslint --fix`
+4. Ensure tests pass: `just test`
+5. Run linting: `just lint`
 6. Submit pull request
 
 ## Related Resources
 
-- **Main Repository:** https://github.com/mashpie/i18n-node
-- **NPM Package:** https://www.npmjs.com/package/i18n
+- **Repository:** https://github.com/hyperpolymath/polyglot-i18n
+- **Original Project:** https://github.com/mashpie/i18n-node
 - **MessageFormat Docs:** http://messageformat.github.io/
 - **CLDR Plural Rules:** http://cldr.unicode.org/index/cldr-spec/plural-rules
+- **ReScript Docs:** https://rescript-lang.org/docs/manual/latest/introduction
+- **Nickel Docs:** https://nickel-lang.org/
+- **GNU Guix:** https://guix.gnu.org/
 
 ## Tips for AI Development
 
-1. **Always read tests** in `/test` to understand expected behavior
-2. **Check examples** in `/examples` for usage patterns
-3. **Locale files** are in `/locales` - JSON format
-4. **Main logic** is in `i18n.js` - ~1200 lines
-5. **Breaking changes** require major version bump
-6. **Backwards compatibility** is important for this library
+1. **Read ROADMAP.adoc** for planned architecture changes
+2. **Always read tests** in `/test` to understand expected behavior
+3. **Check examples** in `/examples` for usage patterns
+4. **Locale files** are in `/locales` - JSON format
+5. **Main logic** is in `i18n.js` - being migrated to ReScript
+6. **Breaking changes** require major version bump
 7. **Performance** matters - translations are cached in memory
 8. **Thread safety** - use instances for concurrent requests
+9. **Use justfile** - `just` has 150+ recipes for common tasks
+10. **Prefer Guix** - Guix-first, Nix fallback for reproducibility
+11. **Container-first** - Chainguard Wolfi for production deployments

@@ -1,177 +1,118 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# polyglot-i18n .gitignore
+# polyglot-i18n .gitattributes
 # ═══════════════════════════════════════════════════════════════════════════════
+#
+# Git attributes for consistent line endings, diffs, and language statistics
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Dependencies
+# Default behavior
 # ─────────────────────────────────────────────────────────────────────────────────
-node_modules/
-.pnpm-store/
-.yarn/
-.npm/
+* text=auto eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Build outputs
+# Source code
 # ─────────────────────────────────────────────────────────────────────────────────
-dist/
-build/
-out/
-lib/
-*.tsbuildinfo
+*.js         text eol=lf linguist-language=JavaScript
+*.mjs        text eol=lf linguist-language=JavaScript
+*.cjs        text eol=lf linguist-language=JavaScript
+*.ts         text eol=lf linguist-language=TypeScript
+*.tsx        text eol=lf linguist-language=TypeScript
+*.jsx        text eol=lf linguist-language=JavaScript
 
 # ReScript
-bindings/rescript/lib/
-bindings/rescript/.bsb.lock
-bindings/rescript/.merlin
-*.bs.js
-*.gen.tsx
+*.res        text eol=lf linguist-language=ReScript
+*.resi       text eol=lf linguist-language=ReScript
 
-# Rust/WASM
-wasm/target/
-wasm/pkg/
-wasm/Cargo.lock
-*.wasm
-*.wat
-
-# Deno
-deno/.deno/
-.deno/
-deno.lock
+# Rust
+*.rs         text eol=lf linguist-language=Rust
+Cargo.toml   text eol=lf linguist-language=TOML
+Cargo.lock   text eol=lf linguist-generated
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Testing & Coverage
+# Configuration
 # ─────────────────────────────────────────────────────────────────────────────────
-coverage/
-.nyc_output/
-*.lcov
-.coverage
-htmlcov/
-test-report.json
-test-results/
-junit.xml
+*.json       text eol=lf linguist-language=JSON
+*.yaml       text eol=lf linguist-language=YAML
+*.yml        text eol=lf linguist-language=YAML
+*.toml       text eol=lf linguist-language=TOML
+*.ncl        text eol=lf linguist-language=Nickel
 
-# Test locale directories (generated during tests)
-testlocales/
-defaultlocales/
-localestowrite/
-localesmakeplural/
-locales_traversal/is/not/possible/en.json
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# IDE & Editors
-# ─────────────────────────────────────────────────────────────────────────────────
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-*.sublime-workspace
-*.sublime-project
-.project
-.classpath
-.settings/
-*.code-workspace
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# OS Files
-# ─────────────────────────────────────────────────────────────────────────────────
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-Desktop.ini
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Logs & Debug
-# ─────────────────────────────────────────────────────────────────────────────────
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-.pnpm-debug.log*
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Runtime & Cache
-# ─────────────────────────────────────────────────────────────────────────────────
-.cache/
-.parcel-cache/
-.turbo/
-.eslintcache
-.stylelintcache
-*.tgz
-.env
-.env.local
-.env.*.local
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Containers
-# ─────────────────────────────────────────────────────────────────────────────────
-*.tar
-*.tar.gz
-container/*.tar
-sbom.json
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Guix/Nix
-# ─────────────────────────────────────────────────────────────────────────────────
-/gnu/
-/result
-/result-*
-.guix-profile
-.guix-gc-roots/
-*.drv
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Nickel
-# ─────────────────────────────────────────────────────────────────────────────────
-config/*.json
-!config/schema.json
+# Nix/Guix
+*.nix        text eol=lf linguist-language=Nix
+*.scm        text eol=lf linguist-language=Scheme
+flake.lock   text eol=lf linguist-generated
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Documentation
 # ─────────────────────────────────────────────────────────────────────────────────
-docs/_site/
-docs/api/
-.docusaurus/
-man/man1/*.1
-!man/man1/.gitkeep
+*.md         text eol=lf linguist-documentation
+*.adoc       text eol=lf linguist-documentation
+*.txt        text eol=lf
+LICENSE      text eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Profiling
+# Shell & Scripts
 # ─────────────────────────────────────────────────────────────────────────────────
-*.cpuprofile
-*.heapprofile
-*.heapsnapshot
-isolate-*.log
-.profiles/
-profile.txt
-flamegraph.svg
+*.sh         text eol=lf
+*.bash       text eol=lf
+*.zsh        text eol=lf
+*.fish       text eol=lf
+justfile     text eol=lf
+Makefile     text eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Security & Secrets
+# Container & CI
 # ─────────────────────────────────────────────────────────────────────────────────
-*.pem
-*.key
-*.p12
-*.pfx
-cosign.key
-cosign.pub
-.secrets/
+Containerfile    text eol=lf
+Dockerfile       text eol=lf
+*.dockerfile     text eol=lf
+.dockerignore    text eol=lf
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Misc
+# Binary files
 # ─────────────────────────────────────────────────────────────────────────────────
-*.bak
-*.backup
-*.orig
-*.temp
-*.tmp
-.*.sw?
-\#*\#
-rsr-report.txt
-rsr-compliance-report.txt
+*.wasm       binary
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.gif        binary
+*.ico        binary
+*.svg        text eol=lf
+*.pdf        binary
+*.zip        binary
+*.tar        binary
+*.gz         binary
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Lock files (generated, don't diff)
+# ─────────────────────────────────────────────────────────────────────────────────
+package-lock.json    text eol=lf linguist-generated -diff
+pnpm-lock.yaml       text eol=lf linguist-generated -diff
+yarn.lock            text eol=lf linguist-generated -diff
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Vendored (exclude from stats)
+# ─────────────────────────────────────────────────────────────────────────────────
+examples/**/*.js     linguist-vendored=false
+test/**/*.js         linguist-vendored=false
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Merge strategies
+# ─────────────────────────────────────────────────────────────────────────────────
+package-lock.json    merge=ours
+pnpm-lock.yaml       merge=ours
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Export ignore (not included in archives)
+# ─────────────────────────────────────────────────────────────────────────────────
+.github/             export-ignore
+.gitattributes       export-ignore
+.gitignore           export-ignore
+.editorconfig        export-ignore
+.eslintrc.js         export-ignore
+.eslintignore        export-ignore
+.prettierrc          export-ignore
+.nvmrc               export-ignore
+test/                export-ignore
+examples/            export-ignore
+benchmarks/          export-ignore
