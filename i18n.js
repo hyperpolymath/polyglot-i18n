@@ -468,7 +468,11 @@ const i18n = function I18n(_OPTS = false) {
           .split(/[_-\s]+/)
           .filter((el) => true && el)
         // take the first part of locale, fallback to full locale
-        p = MakePlural[lc[0] || targetLocale]
+        // Use helper to strictly validate supported locale key
+        const safePluralKey = getSafeLocaleKey(lc[0] || targetLocale, locales, MakePlural)
+        p = safePluralKey ? MakePlural[safePluralKey] : undefined
+        p = safePluralKey ? MakePlural[safePluralKey] : undefined
+        p = safePluralKey ? MakePlural[safePluralKey] : undefined
         PluralsForLocale[targetLocale] = p
       }
 
@@ -511,13 +515,12 @@ const i18n = function I18n(_OPTS = false) {
       targetLocale = object
     }
 
-    // consider a fallback
-    if (!locales[targetLocale]) {
-      targetLocale = getFallback(targetLocale, fallbacks) || targetLocale
-    }
+    // Strict safe locale validation
+    const safeLocale = getSafeLocaleKey(targetLocale, locales, MakePlural) || defaultLocale
+    targetLocale = locales[safeLocale] ? safeLocale : defaultLocale
 
     // now set locale on object
-    targetObject.locale = locales[targetLocale] ? targetLocale : defaultLocale
+    targetObject.locale = targetLocale
 
     // consider any extra registered objects
     if (typeof register === 'object') {
