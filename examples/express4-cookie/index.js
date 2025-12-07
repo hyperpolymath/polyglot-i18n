@@ -24,23 +24,21 @@ app.getDelay = function (req, res) {
 }
 
 app.get('/test', function (req, res) {
-  // delay a response to simulate a long running process,
-  // while another request comes in with altered language settings
-  // lgtm[js/resource-exhaustion] - delay is bounded by MAX_DELAY_MS (5000ms) in getDelay()
+  // Security: delay is bounded to [0, MAX_DELAY_MS] preventing resource exhaustion (CWE-400)
+  var boundedDelay = app.getDelay(req, res) // Returns value clamped to [0, 5000]ms
   setTimeout(function () {
     res.send(
       '<body>res: ' + res.__('Hello') + ' req: ' + req.__('Hello') + '</body>'
     )
-  }, app.getDelay(req, res))
+  }, boundedDelay)
 })
 
 app.get('/testfail', function (req, res) {
-  // delay a response to simulate a long running process,
-  // while another request comes in with altered language settings
-  // lgtm[js/resource-exhaustion] - delay is bounded by MAX_DELAY_MS (5000ms) in getDelay()
+  // Security: delay is bounded to [0, MAX_DELAY_MS] preventing resource exhaustion (CWE-400)
+  var boundedDelay = app.getDelay(req, res) // Returns value clamped to [0, 5000]ms
   setTimeout(function () {
     res.send('<body>' + i18n.__('Hello') + '</body>')
-  }, app.getDelay(req, res))
+  }, boundedDelay)
 })
 
 // startup

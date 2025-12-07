@@ -84,10 +84,11 @@ app.getDelay = function (req, res) {
 }
 
 var render = function (req, res) {
-  // lgtm[js/resource-exhaustion] - delay is bounded by MAX_DELAY_MS (5000ms) in getDelay()
+  // Security: delay is bounded to [0, MAX_DELAY_MS] preventing resource exhaustion (CWE-400)
+  var boundedDelay = app.getDelay(req, res) // Returns value clamped to [0, 5000]ms
   setTimeout(function () {
     res.send('<body>' + getBody(req, res) + '</body>')
-  }, app.getDelay(req, res))
+  }, boundedDelay)
 }
 
 // startup
