@@ -473,11 +473,17 @@ const i18n = function I18n(_OPTS = false) {
       }
 
       // fallback to 'other' on case of missing translations
-      // Security: validate plural key before using as property accessor
-      const pluralKey = p(count)
-      if (isSafeKey(pluralKey) && Object.prototype.hasOwnProperty.call(msg, pluralKey)) {
-        msg = msg[pluralKey]
+      // Security: validate plural function and key before using as property accessor
+      // p could be undefined if locale is not supported by make-plural
+      if (typeof p === 'function') {
+        const pluralKey = p(count)
+        if (typeof pluralKey === 'string' && isSafeKey(pluralKey) && Object.prototype.hasOwnProperty.call(msg, pluralKey)) {
+          msg = msg[pluralKey]
+        } else {
+          msg = msg.other
+        }
       } else {
+        // Fallback to 'other' when plural function is not available for this locale
         msg = msg.other
       }
     }
