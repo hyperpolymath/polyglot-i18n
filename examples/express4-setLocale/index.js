@@ -8,8 +8,9 @@ var i18n = require('../..') // require('i18n')
 // while req, res and res.locals are and will always be
 var funkyObject = {}
 
+const SUPPORTED_LOCALES = ['en', 'de', 'ar'];
 i18n.configure({
-  locales: ['en', 'de', 'ar'],
+  locales: SUPPORTED_LOCALES,
   register: funkyObject,
   directory: path.join(__dirname, 'locales'),
   updateFiles: false
@@ -27,42 +28,54 @@ app.get('/default/:lang', function (req, res) {
 // implicitly sets all
 // req: مرحبا res: مرحبا res.locals: مرحبا funkyObject: مرحبا
 app.get('/onreq/:lang', function (req, res) {
-  i18n.setLocale(req, req.params.lang)
+  if (SUPPORTED_LOCALES.includes(req.params.lang)) {
+    i18n.setLocale(req, req.params.lang)
+  }
   render(req, res)
 })
 
 // sets res, res.locals and funkyObject
 // req: Hallo res: مرحبا res.locals: مرحبا funkyObject: مرحبا
 app.get('/onres/:lang', function (req, res) {
-  i18n.setLocale(res, req.params.lang)
+  if (SUPPORTED_LOCALES.includes(req.params.lang)) {
+    i18n.setLocale(res, req.params.lang)
+  }
   render(req, res)
 })
 
 // sets res.locals and funkyObject
 // req: Hallo res: Hallo res.locals: مرحبا funkyObject: مرحبا
 app.get('/onreslocals/:lang', function (req, res) {
-  i18n.setLocale(res.locals, req.params.lang)
+  if (SUPPORTED_LOCALES.includes(req.params.lang)) {
+    i18n.setLocale(res.locals, req.params.lang)
+  }
   render(req, res)
 })
 
 // sets funkyObject only
 // req: Hallo res: Hallo res.locals: Hallo funkyObject: مرحبا
 app.get('/onfunky/:lang', function (req, res) {
-  i18n.setLocale(funkyObject, req.params.lang)
+  if (SUPPORTED_LOCALES.includes(req.params.lang)) {
+    i18n.setLocale(funkyObject, req.params.lang)
+  }
   render(req, res)
 })
 
 // sets req & funkyObject only
 // req: مرحبا res: Hallo res.locals: Hallo funkyObject: مرحبا
 app.get('/onarray/:lang', function (req, res) {
-  i18n.setLocale([req, funkyObject], req.params.lang)
+  if (SUPPORTED_LOCALES.includes(req.params.lang)) {
+    i18n.setLocale([req, funkyObject], req.params.lang)
+  }
   render(req, res)
 })
 
 // sets res & funkyObject only
 // req: Hallo res: مرحبا res.locals: Hallo funkyObject: مرحبا
 app.get('/onresonly/:lang', function (req, res) {
-  i18n.setLocale(res, req.params.lang, true)
+  if (SUPPORTED_LOCALES.includes(req.params.lang)) {
+    i18n.setLocale(res, req.params.lang, true)
+  }
   render(req, res)
 })
 
