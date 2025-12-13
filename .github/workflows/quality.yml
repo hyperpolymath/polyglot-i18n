@@ -8,6 +8,8 @@ permissions: read-all
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       
@@ -16,7 +18,7 @@ jobs:
           find . -type f -perm /111 -name "*.sh" | head -10 || true
       
       - name: Check for secrets
-        uses: trufflesecurity/trufflehog@8a83df83c66e0b5c7ee6b3cd5636dd2d2c0c7c56
+        uses: trufflesecurity/trufflehog@8a8ef8526528d8a4ff3e2c90be08e25ef8efbd9b # v3.88.3
         with:
           path: ./
           base: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -38,6 +40,8 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check documentation
