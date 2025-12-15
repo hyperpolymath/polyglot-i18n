@@ -6,7 +6,7 @@
 const { Injectable, NestInterceptor, ExecutionContext, CallHandler } = require('@nestjs/common');
 const { map } = require('rxjs/operators');
 
-@Injectable()
+// Decorators applied via Reflect.decorate() below
 class I18nInterceptor {
   constructor(i18nService) {
     this.i18nService = i18nService;

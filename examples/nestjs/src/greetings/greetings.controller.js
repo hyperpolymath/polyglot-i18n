@@ -6,21 +6,19 @@
 const { Controller, Get, Param, Query } = require('@nestjs/common');
 const { I18nService } = require('../i18n/i18n.service');
 
-@Controller('greetings')
+// Decorators applied via Reflect.decorate() below
 class GreetingsController {
   constructor(i18nService) {
     this.i18nService = i18nService;
   }
 
-  @Get()
-  async getGreeting(@Query('name') name) {
+  async getGreeting(name) {
     return {
       message: this.i18nService.__('greeting', name || 'World'),
       locale: this.i18nService.getLocale()
     };
   }
 
-  @Get('locales')
   async getAvailableLocales() {
     return {
       locales: this.i18nService.getLocales(),
@@ -28,7 +26,6 @@ class GreetingsController {
     };
   }
 
-  @Get('catalog')
   async getCatalog() {
     return {
       catalog: this.i18nService.getCatalog(),
@@ -36,8 +33,7 @@ class GreetingsController {
     };
   }
 
-  @Get(':locale')
-  async getGreetingInLocale(@Param('locale') locale, @Query('name') name) {
+  async getGreetingInLocale(locale, name) {
     this.i18nService.setLocale(locale);
 
     return {
@@ -46,8 +42,7 @@ class GreetingsController {
     };
   }
 
-  @Get('plural/:count')
-  async getPluralGreeting(@Param('count') count) {
+  async getPluralGreeting(count) {
     const num = parseInt(count, 10);
 
     return {

@@ -5,9 +5,9 @@
 const { Injectable, Inject, Scope } = require('@nestjs/common');
 const { I18n } = require('i18n');
 
-@Injectable({ scope: Scope.REQUEST })
+// Decorators applied via Reflect.decorate() below
 class I18nService {
-  constructor(@Inject('I18N_OPTIONS') options, @Inject('REQUEST') request) {
+  constructor(options, request) {
     this.i18n = new I18n(options);
     this.request = request;
 
