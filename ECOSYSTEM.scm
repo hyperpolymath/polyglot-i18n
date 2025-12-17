@@ -8,7 +8,7 @@
   (version "1.0.0")
   (name "polyglot-i18n")
   (type "project")
-  (purpose "Jonathan D.A. Jewell <jonathan.jewell@gmail.com>")
+  (purpose "ReScript-first internationalization library with WASM-accelerated hot paths for polyglot applications")
 
   (position-in-ecosystem
     "Part of the hyperpolymath ecosystem of tools, libraries, and specifications.
@@ -53,7 +53,8 @@
          ECOSYSTEM.scm = Project relationship format")))
 
   (what-this-is
-    "Jonathan D.A. Jewell <jonathan.jewell@gmail.com>
+    "A modern fork of i18n-node reimagined for polyglot development with
+     ReScript-first architecture and WASM-accelerated performance.
 
      Design principles:
      - RSR Gold compliance target

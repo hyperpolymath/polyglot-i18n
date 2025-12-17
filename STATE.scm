@@ -15,7 +15,7 @@
   '((version . "0.1.0")
     (schema-version . "1.0")
     (created . "2025-12-15")
-    (updated . "2025-12-15")
+    (updated . "2025-12-17")
     (project . "polyglot-i18n")
     (repo . "github.com/hyperpolymath/polyglot-i18n")))
 
@@ -25,7 +25,7 @@
 
 (define project-context
   '((name . "polyglot-i18n")
-    (tagline . "Jonathan D.A. Jewell <jonathan.jewell@gmail.com>")
+    (tagline . "ReScript-first, WASM-accelerated translation module with dynamic JSON storage")
     (version . "0.1.0")
     (license . "AGPL-3.0-or-later")
     (rsr-compliance . "gold-target")
@@ -151,6 +151,15 @@
 
 (define session-history
   '((snapshots
+     ((date . "2025-12-17")
+      (session . "scm-security-review")
+      (accomplishments
+       ("Fixed SCM files with wrong URLs (mashpie/i18n-node → hyperpolymath/polyglot-i18n)"
+        "Fixed security-policy.yml HTTP/HTTPS detection bug"
+        "Fixed metadata errors in META.scm, STATE.scm, ECOSYSTEM.scm"
+        "Updated security vulnerability reporting URL"
+        "Renamed package definitions to polyglot-i18n"))
+      (notes . "Security and consistency review of SCM files"))
      ((date . "2025-12-15")
       (session . "initial-state-creation")
       (accomplishments
@@ -189,6 +198,6 @@
     (next-milestone . "v0.2 - Core Functionality")
     (critical-blockers . 0)
     (high-priority-issues . 0)
-    (updated . "2025-12-15")))
+    (updated . "2025-12-17")))
 
 ;;; End of STATE.scm

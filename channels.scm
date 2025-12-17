@@ -1,10 +1,10 @@
-;;; channels.scm --- Guix channel configuration for i18n-node-enhanced
+;;; channels.scm --- Guix channel configuration for polyglot-i18n
 ;;;
-;;; Copyright (C) 2024-2025 i18n-node-enhanced contributors
-;;; SPDX-License-Identifier: MIT
+;;; Copyright (C) 2024-2025 polyglot-i18n contributors
+;;; SPDX-License-Identifier: AGPL-3.0-or-later
 ;;;
 ;;; This file configures the Guix channels required for building and
-;;; developing i18n-node-enhanced.
+;;; developing polyglot-i18n.
 
 (list
  ;; Main GNU Guix channel
@@ -35,20 +35,20 @@
   (url "https://github.com/guix-science/guix-science.git")
   (branch "master"))
 
- ;; i18n-node-enhanced channel (this project)
+ ;; polyglot-i18n channel (this project)
  (channel
-  (name 'i18n)
-  (url "https://github.com/mashpie/i18n-node")
+  (name 'polyglot-i18n)
+  (url "https://github.com/hyperpolymath/polyglot-i18n")
   (branch "main")))
 
 ;;; Usage:
 ;;;
 ;;; 1. Copy to ~/.config/guix/channels.scm
 ;;; 2. Run: guix pull
-;;; 3. Install: guix install i18n-node-enhanced
+;;; 3. Install: guix install polyglot-i18n
 ;;;
 ;;; For development:
-;;;   guix shell -D i18n-node-enhanced
+;;;   guix shell -D polyglot-i18n
 ;;;
 ;;; Or with manifest:
 ;;;   guix shell -m manifest.scm

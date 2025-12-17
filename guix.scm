@@ -1,12 +1,12 @@
-;;; guix.scm --- GNU Guix package definition for i18n-node-enhanced
+;;; guix.scm --- GNU Guix package definition for polyglot-i18n
 ;;;
-;;; Copyright (C) 2024-2025 i18n-node-enhanced contributors
-;;; SPDX-License-Identifier: MIT
+;;; Copyright (C) 2024-2025 polyglot-i18n contributors
+;;; SPDX-License-Identifier: AGPL-3.0-or-later
 ;;;
-;;; This file defines the GNU Guix package for i18n-node-enhanced,
+;;; This file defines the GNU Guix package for polyglot-i18n,
 ;;; enabling reproducible builds and supply-chain integrity.
 
-(define-module (i18n-node-enhanced)
+(define-module (polyglot-i18n)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
@@ -27,8 +27,8 @@
 
 ;;; Commentary:
 ;;;
-;;; i18n-node-enhanced: A lightweight translation module with dynamic JSON
-;;; storage for polyglot applications. This package provides:
+;;; polyglot-i18n: A ReScript-first, WASM-accelerated translation module
+;;; with dynamic JSON storage for polyglot applications. This package provides:
 ;;;
 ;;; - Core JavaScript/ReScript library
 ;;; - WebAssembly performance modules
@@ -46,7 +46,7 @@
   (dirname (current-filename)))
 
 (define (i18n-version)
-  "Return the current version of i18n-node-enhanced."
+  "Return the current version of polyglot-i18n."
   "2.0.0-alpha")
 
 ;;;
@@ -83,8 +83,8 @@
                                                "/lib/wasm")))))))
     (native-inputs
      (list wasm-pack rust-analyzer))
-    (home-page "https://github.com/mashpie/i18n-node")
-    (synopsis "WebAssembly performance core for i18n-node-enhanced")
+    (home-page "https://github.com/hyperpolymath/polyglot-i18n")
+    (synopsis "WebAssembly performance core for polyglot-i18n")
     (description
      "High-performance WebAssembly modules for i18n operations including
 CLDR plural rule evaluation, hash-based translation lookup, and string
@@ -122,10 +122,10 @@ interpolation.")
              (invoke "npx" "rescript" "build"))))))
     (inputs
      (list node-lts))
-    (home-page "https://github.com/mashpie/i18n-node")
-    (synopsis "ReScript bindings for i18n-node-enhanced")
+    (home-page "https://github.com/hyperpolymath/polyglot-i18n")
+    (synopsis "ReScript bindings for polyglot-i18n")
     (description
-     "Type-safe ReScript bindings for the i18n-node-enhanced library,
+     "Type-safe ReScript bindings for the polyglot-i18n library,
 providing ML-style syntax and compile-time type checking.")
     (license license:expat)))
 
@@ -133,9 +133,9 @@ providing ML-style syntax and compile-time type checking.")
 ;;; Main i18n Package
 ;;;
 
-(define-public i18n-node-enhanced
+(define-public polyglot-i18n
   (package
-    (name "i18n-node-enhanced")
+    (name "polyglot-i18n")
     (version (i18n-version))
     (source
      (local-file %source-dir
@@ -176,10 +176,10 @@ providing ML-style syntax and compile-time type checking.")
      (list node-lts))
     (propagated-inputs
      (list i18n-rescript))
-    (home-page "https://github.com/mashpie/i18n-node")
-    (synopsis "Lightweight translation module with dynamic JSON storage")
+    (home-page "https://github.com/hyperpolymath/polyglot-i18n")
+    (synopsis "ReScript-first translation module with dynamic JSON storage")
     (description
-     "i18n-node-enhanced is a polyglot internationalization library featuring:
+     "polyglot-i18n is a ReScript-first internationalization library featuring:
 @itemize
 @item Dynamic JSON storage for translations
 @item Common __('...') syntax
@@ -200,7 +200,7 @@ providing ML-style syntax and compile-time type checking.")
   (package
     (name "i18n-cli")
     (version (i18n-version))
-    (source (package-source i18n-node-enhanced))
+    (source (package-source polyglot-i18n))
     (build-system node-build-system)
     (arguments
      `(#:phases
@@ -231,9 +231,9 @@ providing ML-style syntax and compile-time type checking.")
                (install-file "completions/_i18n" zsh)
                (install-file "completions/i18n.fish" fish)))))))
     (inputs
-     (list i18n-node-enhanced))
-    (home-page "https://github.com/mashpie/i18n-node")
-    (synopsis "Command-line tools for i18n-node-enhanced")
+     (list polyglot-i18n))
+    (home-page "https://github.com/hyperpolymath/polyglot-i18n")
+    (synopsis "Command-line tools for polyglot-i18n")
     (description
      "Comprehensive CLI for managing internationalization with commands for
 validation, synchronization, extraction, and more.")
@@ -243,18 +243,18 @@ validation, synchronization, extraction, and more.")
 ;;; Development Package (for hacking)
 ;;;
 
-(define-public i18n-dev
+(define-public polyglot-i18n-dev
   (package
-    (inherit i18n-node-enhanced)
-    (name "i18n-dev")
+    (inherit polyglot-i18n)
+    (name "polyglot-i18n-dev")
     (native-inputs
-     (modify-inputs (package-native-inputs i18n-node-enhanced)
+     (modify-inputs (package-native-inputs polyglot-i18n)
        (prepend rust
                 rust-analyzer
                 wasm-pack
                 deno
                 just
                 nickel)))
-    (synopsis "Development environment for i18n-node-enhanced")))
+    (synopsis "Development environment for polyglot-i18n")))
 
 ;;; guix.scm ends here

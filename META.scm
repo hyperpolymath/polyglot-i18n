@@ -20,7 +20,7 @@
      (title . "Initial Architecture and RSR Compliance")
      (status . "accepted")
      (date . "2025-12-15")
-     (context . "Jonathan D.A. Jewell <jonathan.jewell@gmail.com>")
+     (context . "Project requires foundational architecture decisions before development can proceed. Need to establish CI/CD, security practices, and code standards.")
      (decision . "Establish foundational architecture following Rhodium Standard Repository guidelines with multi-platform CI/CD, SHA-pinned actions, and SPDX headers")
      (consequences . ("RSR Gold compliance target"
                       "SHA-pinned GitHub Actions for security"
