@@ -538,6 +538,49 @@ impl I18nWasm {
         let mut strings: HashMap<String, String> = HashMap::new();
         let mut plurals: HashMap<String, PluralForms> = HashMap::new();
 
+        // Recursive helper to flatten nested objects with dot notation
+        fn flatten_object(
+            prefix: &str,
+            obj: &serde_json::Map<String, serde_json::Value>,
+            strings: &mut HashMap<String, String>,
+            plurals: &mut HashMap<String, PluralForms>,
+        ) {
+            for (key, value) in obj {
+                let full_key = if prefix.is_empty() {
+                    key.clone()
+                } else {
+                    format!("{}.{}", prefix, key)
+                };
+
+                match value {
+                    serde_json::Value::String(s) => {
+                        strings.insert(full_key, s.clone());
+                    }
+                    serde_json::Value::Object(nested) => {
+                        // Check if it's plural forms (has "other" key)
+                        if nested.contains_key("other") {
+                            let forms = PluralForms {
+                                zero: nested.get("zero").and_then(|v| v.as_str()).map(String::from),
+                                one: nested.get("one").and_then(|v| v.as_str()).map(String::from),
+                                two: nested.get("two").and_then(|v| v.as_str()).map(String::from),
+                                few: nested.get("few").and_then(|v| v.as_str()).map(String::from),
+                                many: nested.get("many").and_then(|v| v.as_str()).map(String::from),
+                                other: nested.get("other")
+                                    .and_then(|v| v.as_str())
+                                    .map(String::from)
+                                    .unwrap_or_default(),
+                            };
+                            plurals.insert(full_key, forms);
+                        } else {
+                            // Recursively flatten nested objects
+                            flatten_object(&full_key, nested, strings, plurals);
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        }
+
         for (key, value) in catalog {
             match value {
                 serde_json::Value::String(s) => {
@@ -558,8 +601,10 @@ impl I18nWasm {
                                 .unwrap_or_default(),
                         };
                         plurals.insert(key, forms);
+                    } else {
+                        // Handle nested objects for dot notation
+                        flatten_object(&key, &obj, &mut strings, &mut plurals);
                     }
-                    // TODO: Handle nested objects for dot notation
                 }
                 _ => {}
             }
