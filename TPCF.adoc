@@ -242,7 +242,7 @@ risk).
 
 ==== Q: Can companies sponsor perimeter access?
 
-*A:* No. Access is merit-based only. Companies can sponsor development
+*A:* No. Access is merit-based only. Companies can sponsor development
 time, not access.
 
 '''''
