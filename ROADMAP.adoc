@@ -338,7 +338,7 @@ type Subscription {
 
 == Contributing
 
-See link:CONTRIBUTING.md[CONTRIBUTING.md] for how to get involved.
+See link:.github/CONTRIBUTING.md[CONTRIBUTING.md] for how to get involved.
 
 === Priority Areas
 
@@ -371,7 +371,7 @@ See link:CONTRIBUTING.md[CONTRIBUTING.md] for how to get involved.
 == References
 
 * link:README.adoc[README]
-* link:CONTRIBUTING.md[Contributing]
+* link:.github/CONTRIBUTING.md[Contributing]
 * link:CHANGELOG.md[Changelog]
 * link:SECURITY.md[Security Policy]
 * link:DEVELOPMENT_SUMMARY.md[Development Summary]
