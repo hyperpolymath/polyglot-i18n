@@ -393,7 +393,7 @@ just benchmark
 
 == Contributing
 
-See link:CONTRIBUTING.md[CONTRIBUTING.md] for development setup and guidelines.
+See link:.github/CONTRIBUTING.md[CONTRIBUTING.md] for development setup and guidelines.
 
 *Language Policy:* ReScript-first, Deno runtime, Rust for WASM. No TypeScript.
 
