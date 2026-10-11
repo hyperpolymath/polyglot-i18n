@@ -35,7 +35,7 @@ jobs:
           path: base
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: '18.x'
           cache: 'npm'
@@ -64,7 +64,7 @@ jobs:
           echo "\`\`\`" >> benchmark-results.md
 
       - name: Upload benchmark results
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: benchmark-results
           path: |
