@@ -25,9 +25,9 @@ workflows:
         - 'hyperpolymath/deed-ecosystem@main'
         - 'hyperpolymath/k9-ecosystem@main'
     '.github/workflows/governance.yml':
-        - 'metadatastician/standards@7e9b1de272dc110f9653836b9a2f6cd43000bfe7'
+        - 'metadatastician/standards@ae8492aefec9166af2c6b9ed8f494082d31c183d'
     '.github/workflows/hypatia-scan.yml':
-        - 'metadatastician/standards@7e9b1de272dc110f9653836b9a2f6cd43000bfe7'
+        - 'metadatastician/standards@ae8492aefec9166af2c6b9ed8f494082d31c183d'
     '.github/workflows/instant-sync.yml':
         - 'peter-evans/repository-dispatch@v4.0.1'
     '.github/workflows/k9-svc-validation.yml':
@@ -42,7 +42,7 @@ workflows:
         - 'actions/upload-artifact@v7.0.2'
         - 'oven-sh/setup-bun@v2.2.0'
     '.github/workflows/mirror.yml':
-        - 'metadatastician/standards@7e9b1de272dc110f9653836b9a2f6cd43000bfe7'
+        - 'metadatastician/standards@ae8492aefec9166af2c6b9ed8f494082d31c183d'
     '.github/workflows/pages.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/deploy-pages@v5.0.1'
@@ -57,9 +57,9 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'oven-sh/setup-bun@v2.2.0'
     '.github/workflows/scorecard.yml':
-        - 'metadatastician/standards@7e9b1de272dc110f9653836b9a2f6cd43000bfe7'
+        - 'metadatastician/standards@ae8492aefec9166af2c6b9ed8f494082d31c183d'
     '.github/workflows/secret-scanner.yml':
-        - 'metadatastician/standards@7e9b1de272dc110f9653836b9a2f6cd43000bfe7'
+        - 'metadatastician/standards@ae8492aefec9166af2c6b9ed8f494082d31c183d'
     '.github/workflows/workflow-linter.yml':
         - 'actions/checkout@v7.0.1'
 dependencies:
@@ -160,9 +160,9 @@ dependencies:
         commit: 'sha1-c1a34884054fabf0e9de81dbf68f4ba7874e85f1'
         owner_id: 6759885
         repo_id: 1275650185
-    'metadatastician/standards@7e9b1de272dc110f9653836b9a2f6cd43000bfe7':
-        ref: 'main'
-        commit: 'sha1-7e9b1de272dc110f9653836b9a2f6cd43000bfe7'
+    'metadatastician/standards@ae8492aefec9166af2c6b9ed8f494082d31c183d':
+        ref: 'ae8492aefec9166af2c6b9ed8f494082d31c183d'
+        commit: 'sha1-ae8492aefec9166af2c6b9ed8f494082d31c183d'
         owner_id: 297579217
         repo_id: 1116521501
         uses:
