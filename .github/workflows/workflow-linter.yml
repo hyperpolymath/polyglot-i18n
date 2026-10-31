@@ -25,11 +25,18 @@ jobs:
 
       - name: Check SPDX headers
         run: |
+          # Header block, not line 1. gh actions-lock inserts
+          # "# This workflow is managed by gh actions-lock." at line 1;
+          # REUSE allows SPDX anywhere in the leading comment block.
           errors=0
           for f in .github/workflows/*.yml .github/workflows/*.yaml; do
             [ -f "$f" ] || continue
-            if ! head -1 "$f" | grep -q "SPDX-License-Identifier"; then
-              echo "ERROR: $f missing SPDX header"
+            if ! awk '
+              /^[[:space:]]*#/ { if ($0 ~ /SPDX-License-Identifier/) found=1; next }
+              { exit }
+              END { exit found ? 0 : 1 }
+            ' "$f"; then
+              echo "ERROR: $f has no SPDX-License-Identifier in its header comment block"
               errors=$((errors + 1))
             fi
           done

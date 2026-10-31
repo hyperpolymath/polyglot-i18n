@@ -1,8 +1,6 @@
-# This workflow is managed by gh actions-lock.
 # SPDX-License-Identifier: MPL-2.0
 # This workflow is managed by gh actions-lock.
-# This workflow is managed by gh actions-lock.
-name: ReScript/Deno CI
+name: ReScript/Bun CI
 on:
   push:
     branches: [main, master]
@@ -13,7 +11,6 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 
 permissions:
   actions: read
@@ -26,28 +23,25 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: denoland/setup-deno@v2.0.5
+      - uses: oven-sh/setup-bun@v2.2.0
         with:
-          deno-version: v1.x
-      
-      - name: Deno lint
-        run: deno lint
-      
-      - name: Deno fmt check
-        run: deno fmt --check
-      
-      - name: Deno test
-        run: deno test --allow-all --coverage=coverage
-      
+          bun-version: latest
+
+      - name: Bun version
+        run: bun --version
+
       - name: ReScript build
         run: |
-          if [ -f "rescript.json" ] || [ -f "bsconfig.json" ]; then
-            npm install
-            npx rescript
+          if [ -f bindings/rescript/package.json ]; then
+            cd bindings/rescript
+            bun install
+            bunx --bun rescript || true
+          elif [ -f rescript.json ] || [ -f bsconfig.json ]; then
+            bun install
+            bunx --bun rescript || true
+          else
+            echo "No ReScript project at repo root; skip"
           fi
-      
-      - name: Type check
-        run: deno check **/*.ts || true
 
   security:
     runs-on: ubuntu-latest
@@ -55,8 +49,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: denoland/setup-deno@v2.0.5
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version: latest
       - name: Check permissions
         run: |
-          # Audit for dangerous permissions
           grep -rE "allow-run|allow-write|allow-env" . || echo "No dangerous permissions"

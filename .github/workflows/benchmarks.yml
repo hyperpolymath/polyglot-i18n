@@ -1,6 +1,4 @@
-# This workflow is managed by gh actions-lock.
 # SPDX-License-Identifier: MPL-2.0
-# This workflow is managed by gh actions-lock.
 # This workflow is managed by gh actions-lock.
 name: Performance Benchmarks
 
@@ -8,7 +6,6 @@ on:
   pull_request:
     branches: [ main, develop ]
   workflow_dispatch:
-
 
 permissions:
   actions: read
@@ -34,20 +31,28 @@ jobs:
           ref: ${{ github.base_ref }}
           path: base
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7.1.0
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2.2.0
         with:
-          node-version: '18.x'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
+          bun-version: latest
 
       - name: Run translation benchmarks
-        run: node benchmarks/translation-bench.js > bench-translation.txt
+        run: |
+          if [ ! -f index.js ]; then
+            echo "No library entry (index.js); skip translation benches"
+            echo "skipped" > bench-translation.txt
+            exit 0
+          fi
+          bun benchmarks/translation-bench.js > bench-translation.txt
 
       - name: Run comparison benchmarks
-        run: node benchmarks/comparison-bench.js > bench-comparison.txt
+        run: |
+          if [ ! -f index.js ]; then
+            echo "No library entry (index.js); skip comparison benches"
+            echo "skipped" > bench-comparison.txt
+            exit 0
+          fi
+          bun benchmarks/comparison-bench.js > bench-comparison.txt
 
       - name: Combine benchmark results
         run: |
@@ -90,6 +95,5 @@ jobs:
       - name: Performance regression check
         if: github.event_name == 'pull_request'
         run: |
-          # This is a placeholder for more sophisticated regression checking
           echo "Performance regression check would run here"
           echo "Compare current benchmarks with base branch"
