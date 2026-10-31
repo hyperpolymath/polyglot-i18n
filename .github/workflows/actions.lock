@@ -161,7 +161,7 @@ dependencies:
         owner_id: 6759885
         repo_id: 1275650185
     'metadatastician/standards@1725bebd3773ea25627479f813283abf1c497a85':
-        ref: '1725bebd3773ea25627479f813283abf1c497a85'
+        ref: 'main'
         commit: 'sha1-1725bebd3773ea25627479f813283abf1c497a85'
         owner_id: 297579217
         repo_id: 1116521501
