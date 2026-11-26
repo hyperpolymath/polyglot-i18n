@@ -6,7 +6,6 @@ Comprehensive examples for 25+ modern frameworks and runtimes.
 
 ==== React Ecosystem
 
-* ✅ *Next.js* - SSR/SSG with i18n routing (`+nextjs/+`)
 * ✅ *Remix* - Full-stack React framework (`+remix/+`)
 
 ==== Vue Ecosystem
@@ -139,7 +138,7 @@ Each example includes: - Unit tests - Integration tests - E2E tests
 [source,bash]
 ----
 # Pick a framework
-cd examples/nextjs
+cd examples/hono
 
 # Install dependencies
 npm install
