@@ -108,8 +108,7 @@ polyglot-i18n/
 │   ├── fastify/
 │   ├── hono/
 │   ├── koa/
-│   ├── nestjs/
-│   └── nextjs/
+│   └── nestjs/
 │
 ├── test/                   # Test suite
 └── .github/                # CI/CD workflows

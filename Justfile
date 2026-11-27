@@ -893,10 +893,6 @@ example-fastify:
 example-koa:
     cd examples/koa && npm install && npm run dev
 
-# Run Next.js example
-example-nextjs:
-    cd examples/nextjs && npm install && npm run dev
-
 # Run Deno Oak example
 example-deno-oak:
     cd deno && deno run --allow-read --allow-net examples/oak.ts

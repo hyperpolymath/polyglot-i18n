@@ -31,8 +31,9 @@ jobs:
 
       - name: Run ESLint
         run: |
-          if [ ! -f package.json ]; then
-            echo "No root package.json; skip ESLint (npm-avoidant, bun-port)"
+          # Opt-in: run only when a root ESLint config exists.
+          if ! compgen -G "eslint.config.*" >/dev/null && ! compgen -G ".eslintrc*" >/dev/null; then
+            echo "No root ESLint config; skip ESLint (opt-in)"
             exit 0
           fi
           bun install --frozen-lockfile
@@ -56,8 +57,9 @@ jobs:
 
       - name: Check formatting
         run: |
-          if [ ! -f package.json ]; then
-            echo "No root package.json; skip Prettier (npm-avoidant, bun-port)"
+          # Opt-in: run only when a root Prettier config exists.
+          if ! compgen -G "prettier.config.*" >/dev/null && ! compgen -G ".prettierrc*" >/dev/null; then
+            echo "No root Prettier config; skip Prettier (opt-in)"
             exit 0
           fi
           bun install --frozen-lockfile
