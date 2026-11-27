@@ -127,7 +127,7 @@
       "New features in ReScript, not JavaScript/TypeScript. Legacy i18n.js
        kept as runtime bridge until migration complete.")
     (invariant "language-policy"
-      "No TypeScript, Python, Go, npm-only deps. Use ReScript, Deno, Rust.
+      "No TypeScript, Python, Go, npm-only deps. Use AffineScript, Deno, Rust.
        See .claude/CLAUDE.md for full policy.")
     (invariant "license-dual"
       "MPL-2.0 for npm ecosystem. Original i18n-node code remains MIT.
