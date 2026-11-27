@@ -95,8 +95,7 @@
       "examples/fastify/"
       "examples/hono/"
       "examples/koa/"
-      "examples/nestjs/"
-      "examples/nextjs/")
+      "examples/nestjs/")
     (configuration
       "config/i18n.ncl"          ; Nickel type-safe config
       "package.json"             ; npm metadata
